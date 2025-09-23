@@ -1,4 +1,4 @@
-package com.ernesto.rickandmortycompose.ui.theme
+package com.ernesto.rickandmortycompose.designsystem.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

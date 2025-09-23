@@ -1,6 +1,5 @@
-package com.ernesto.rickandmortycompose.ui.theme
+package com.ernesto.rickandmortycompose.designsystem.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
