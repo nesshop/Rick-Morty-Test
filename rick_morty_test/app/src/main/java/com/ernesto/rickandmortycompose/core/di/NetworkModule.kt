@@ -1,0 +1,29 @@
+package com.ernesto.rickandmortycompose.core.di
+
+import com.ernesto.rickandmortycompose.feature.characters.data.remote.CharacterApiService
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Singleton
+
+@Module
+@InstallIn(SingletonComponent::class)
+object NetworkModule {
+    @Provides
+    @Singleton
+    fun provideRetrofit(): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl("https://rickandmortyapi.com/api/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+
+    @Singleton
+    @Provides
+    fun provideCharacterApiService(retrofit: Retrofit): CharacterApiService {
+        return retrofit.create(CharacterApiService::class.java)
+    }
+}

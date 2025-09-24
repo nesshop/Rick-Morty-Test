@@ -23,7 +23,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil3.compose.AsyncImage
@@ -34,7 +34,7 @@ import com.ernesto.rickandmortycompose.designsystem.components.atoms.RickAndMort
 import com.ernesto.rickandmortycompose.feature.characters.domain.model.CharacterModel
 
 @Composable
-fun CharactersListScreen(viewModel: CharactersListViewModel = viewModel()) {
+fun CharactersListScreen(viewModel: CharactersListViewModel = hiltViewModel()) {
     val characters = viewModel.characters.collectAsLazyPagingItems()
     CharactersGridList(characters = characters)
 }
@@ -56,7 +56,6 @@ fun CharactersGridList(characters: LazyPagingItems<CharacterModel>) {
                 CharacterItem(it)
             }
         }
-
     }
 }
 

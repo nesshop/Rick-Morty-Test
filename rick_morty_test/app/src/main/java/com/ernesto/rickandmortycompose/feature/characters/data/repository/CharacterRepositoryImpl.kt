@@ -9,8 +9,12 @@ import com.ernesto.rickandmortycompose.feature.characters.data.remote.Characters
 import com.ernesto.rickandmortycompose.feature.characters.domain.model.CharacterModel
 import com.ernesto.rickandmortycompose.feature.characters.domain.repository.CharacterRepository
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class CharacterRepositoryImpl(private val remoteDataSource: CharactersRemoteDataSource,
+@Singleton
+class CharacterRepositoryImpl @Inject constructor(
+    private val remoteDataSource: CharactersRemoteDataSource,
     private val localDataSource: CharactersLocalDataSource
 ) : CharacterRepository {
 
@@ -19,7 +23,13 @@ class CharacterRepositoryImpl(private val remoteDataSource: CharactersRemoteData
     }
 
     override fun getAllCharacters(): Flow<PagingData<CharacterModel>> {
-        return Pager(config = PagingConfig(pageSize = MAX_ITEMS),
-            pagingSourceFactory = { CharactersPagingSource(remoteDataSource, localDataSource) }).flow
+        return Pager(
+            config = PagingConfig(pageSize = MAX_ITEMS),
+            pagingSourceFactory = {
+                CharactersPagingSource(
+                    remoteDataSource,
+                    localDataSource
+                )
+            }).flow
     }
 }
