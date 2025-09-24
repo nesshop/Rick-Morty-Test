@@ -8,15 +8,11 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,6 +32,7 @@ import coil3.request.crossfade
 import com.ernesto.rickandmortycompose.R
 import com.ernesto.rickandmortycompose.designsystem.components.atoms.RickAndMortyText
 import com.ernesto.rickandmortycompose.feature.characters.domain.model.CharacterModel
+
 @Composable
 fun CharactersListScreen(viewModel: CharactersListViewModel = viewModel()) {
     val characters = viewModel.characters.collectAsLazyPagingItems()
@@ -48,10 +45,12 @@ fun CharactersGridList(characters: LazyPagingItems<CharacterModel>) {
     RickAndMortyText(
         stringResource(R.string.character_list_screen_title),
     )
-    LazyVerticalGrid(contentPadding = PaddingValues(16.dp),
+    LazyVerticalGrid(
+        contentPadding = PaddingValues(16.dp),
         columns = GridCells.Fixed(2),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
         items(characters.itemCount) { index ->
             characters[index]?.let {
                 CharacterItem(it)
@@ -64,14 +63,17 @@ fun CharactersGridList(characters: LazyPagingItems<CharacterModel>) {
 @Composable
 fun CharacterItem(characterModel: CharacterModel) {
     Box(
-        modifier = Modifier.clip(RoundedCornerShape(24))
-            .border(2.dp, Color.Green, shape = RoundedCornerShape(0, 24, 0, 24)).fillMaxWidth()
+        modifier = Modifier
+            .clip(RoundedCornerShape(24))
+            .border(2.dp, Color.Green, shape = RoundedCornerShape(0, 24, 0, 24))
+            .fillMaxWidth()
             .height(150.dp),
         contentAlignment = Alignment.BottomCenter
     ) {
         AsyncImage(
             model = ImageRequest.Builder(
-                LocalContext.current)
+                LocalContext.current
+            )
                 .data(characterModel.image)
                 .crossfade(true)
                 .build(),
@@ -80,15 +82,18 @@ fun CharacterItem(characterModel: CharacterModel) {
             modifier = Modifier.fillMaxSize()
         )
         Box(
-            modifier = Modifier.fillMaxWidth().height(60.dp).background(
-                brush = Brush.verticalGradient(
-                    listOf(
-                        Color.Black.copy(0f),
-                        Color.Black.copy(0.6f),
-                        Color.Black.copy(1f)
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(60.dp)
+                .background(
+                    brush = Brush.verticalGradient(
+                        listOf(
+                            Color.Black.copy(0f),
+                            Color.Black.copy(0.6f),
+                            Color.Black.copy(1f)
+                        )
                     )
-                )
-            ), contentAlignment = Alignment.Center
+                ), contentAlignment = Alignment.Center
         ) {
             Text(characterModel.name, color = Color.White, fontSize = 18.sp)
         }
