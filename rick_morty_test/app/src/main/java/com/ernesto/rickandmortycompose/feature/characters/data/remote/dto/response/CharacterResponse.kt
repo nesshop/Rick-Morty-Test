@@ -16,6 +16,8 @@ data class CharacterResponse(
     val type: String,
     @SerializedName("gender")
     val gender: String,
+    @SerializedName("image")
+    val image: String
 )
 
 fun CharacterResponse.toDomain() = CharacterModel(
@@ -25,5 +27,5 @@ fun CharacterResponse.toDomain() = CharacterModel(
     species = species,
     type = type,
     gender = gender,
-    image = ""
+    image = image
 )

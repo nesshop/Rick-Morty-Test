@@ -10,5 +10,4 @@ data class CharacterModel(
     val type: String,
     val gender: String,
     val image: String,
-
 ) : Serializable

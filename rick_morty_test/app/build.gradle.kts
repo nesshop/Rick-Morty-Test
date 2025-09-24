@@ -54,6 +54,7 @@ dependencies {
     implementation(libs.paging.compose)
     implementation(libs.viewModel.compose)
     implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
