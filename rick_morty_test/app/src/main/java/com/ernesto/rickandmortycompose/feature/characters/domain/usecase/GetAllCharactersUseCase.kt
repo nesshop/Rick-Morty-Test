@@ -6,7 +6,7 @@ import com.ernesto.rickandmortycompose.feature.characters.domain.repository.Char
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class GetAllCharactersUseCase @Inject constructor(val repository: CharacterRepository) {
+class GetAllCharactersUseCase @Inject constructor(private val repository: CharacterRepository) {
 
     operator fun invoke(): Flow<PagingData<CharacterModel>> {
         return repository.getAllCharacters()

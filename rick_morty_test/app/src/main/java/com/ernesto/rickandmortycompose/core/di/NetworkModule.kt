@@ -1,5 +1,6 @@
 package com.ernesto.rickandmortycompose.core.di
 
+import com.ernesto.rickandmortycompose.BuildConfig
 import com.ernesto.rickandmortycompose.feature.characters.data.remote.CharacterApiService
 import dagger.Module
 import dagger.Provides
@@ -16,7 +17,7 @@ object NetworkModule {
     @Singleton
     fun provideRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("https://rickandmortyapi.com/api/")
+            .baseUrl(BuildConfig.BASE_URL_API)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

@@ -29,5 +29,4 @@ abstract class RepositoryModule {
         charactersRemoteDataSourceImpl: CharactersRemoteDataSourceImpl
     ): CharactersRemoteDataSource
 
-
 }
