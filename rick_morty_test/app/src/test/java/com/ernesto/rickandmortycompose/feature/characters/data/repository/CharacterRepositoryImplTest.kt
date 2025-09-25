@@ -1,21 +1,17 @@
 package com.ernesto.rickandmortycompose.feature.characters.data.repository
 
 import androidx.paging.PagingData
-import app.cash.turbine.test
 import com.ernesto.rickandmortycompose.feature.characters.data.local.CharactersLocalDataSource
 import com.ernesto.rickandmortycompose.feature.characters.data.remote.CharactersRemoteDataSource
-import com.ernesto.rickandmortycompose.feature.characters.data.remote.dto.response.CharacterResponse
-import com.ernesto.rickandmortycompose.feature.characters.data.remote.dto.response.CharactersDataResponse
-import com.ernesto.rickandmortycompose.feature.characters.data.remote.dto.response.InfoResponse
 import com.ernesto.rickandmortycompose.feature.characters.domain.model.CharacterModel
 import com.ernesto.rickandmortycompose.feature.characters.domain.repository.CharacterRepository
-import io.mockk.coEvery
-import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.withTimeout
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class CharacterRepositoryImplTest {
@@ -42,21 +38,25 @@ class CharacterRepositoryImplTest {
     }
 
     @Test
-    fun `WHEN getAllCharacters called multiple times THEN creates different Flow instances`() = runTest {
-        //WHEN
-        val result1 = repository.getAllCharacters()
-        val result2 = repository.getAllCharacters()
+    fun `WHEN getAllCharacters called multiple times THEN creates different Flow instances`() =
+        runTest {
+            //WHEN
+            val result1 = repository.getAllCharacters()
+            val result2 = repository.getAllCharacters()
 
-        //THEN
-        assertNotEquals(result1, result2)
-        assertTrue(result1 is Flow<PagingData<CharacterModel>>)
-        assertTrue(result2 is Flow<PagingData<CharacterModel>>)
-    }
+            //THEN
+            assertNotEquals(result1, result2)
+            assertTrue(result1 is Flow<PagingData<CharacterModel>>)
+            assertTrue(result2 is Flow<PagingData<CharacterModel>>)
+        }
 
     @Test
     fun `WHEN repository is created THEN implements CharacterRepository interface`() {
         // THEN
-        assertTrue("Repository should implement CharacterRepository", repository is CharacterRepository)
+        assertTrue(
+            "Repository should implement CharacterRepository",
+            repository is CharacterRepository
+        )
     }
 
     @Test
