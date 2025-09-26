@@ -6,6 +6,8 @@ import androidx.paging.PagingData
 import com.ernesto.rickandmortycompose.feature.characters.data.local.CharactersLocalDataSource
 import com.ernesto.rickandmortycompose.feature.characters.data.remote.CharactersPagingSource
 import com.ernesto.rickandmortycompose.feature.characters.data.remote.CharactersRemoteDataSource
+import com.ernesto.rickandmortycompose.feature.characters.data.remote.dto.response.CharacterResponse
+import com.ernesto.rickandmortycompose.feature.characters.data.remote.dto.response.toDomain
 import com.ernesto.rickandmortycompose.feature.characters.domain.model.CharacterModel
 import com.ernesto.rickandmortycompose.feature.characters.domain.repository.CharacterRepository
 import kotlinx.coroutines.flow.Flow
@@ -31,5 +33,19 @@ class CharacterRepositoryImpl @Inject constructor(
                     localDataSource
                 )
             }).flow
+    }
+
+    override suspend fun getCharacterById(id: Int): CharacterModel {
+        return try {
+            localDataSource.getCharacterById(id)?.toDomain()?.let { cachedCharacter ->
+                return cachedCharacter
+            }
+
+            val character = remoteDataSource.getCharacterById(id)
+            localDataSource.saveCharacter(character)
+            character.toDomain()
+        } catch (e: Exception) {
+            localDataSource.getCharacterById(id)?.toDomain() ?: throw e
+        }
     }
 }

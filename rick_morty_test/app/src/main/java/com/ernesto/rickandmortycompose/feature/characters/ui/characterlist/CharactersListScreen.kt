@@ -2,6 +2,7 @@ package com.ernesto.rickandmortycompose.feature.characters.ui.characterlist
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -34,13 +35,19 @@ import com.ernesto.rickandmortycompose.designsystem.components.atoms.RickAndMort
 import com.ernesto.rickandmortycompose.feature.characters.domain.model.CharacterModel
 
 @Composable
-fun CharactersListScreen(viewModel: CharactersListViewModel = hiltViewModel()) {
+fun CharactersListScreen(
+    viewModel: CharactersListViewModel = hiltViewModel(),
+    navigateToDetail: (CharacterModel) -> Unit
+) {
     val characters = viewModel.characters.collectAsLazyPagingItems()
-    CharactersGridList(characters = characters)
+    CharactersGridList(characters = characters, navigateToDetail = navigateToDetail)
 }
 
 @Composable
-fun CharactersGridList(characters: LazyPagingItems<CharacterModel>) {
+fun CharactersGridList(
+    characters: LazyPagingItems<CharacterModel>,
+    navigateToDetail: (CharacterModel) -> Unit
+) {
 
     RickAndMortyText(
         stringResource(R.string.character_list_screen_title),
@@ -53,20 +60,23 @@ fun CharactersGridList(characters: LazyPagingItems<CharacterModel>) {
     ) {
         items(characters.itemCount) { index ->
             characters[index]?.let {
-                CharacterItem(it)
+                CharacterItem(
+                    it,
+                    onItemSelected = { characterModel -> navigateToDetail(characterModel) })
             }
         }
     }
 }
 
 @Composable
-fun CharacterItem(characterModel: CharacterModel) {
+fun CharacterItem(characterModel: CharacterModel, onItemSelected: (CharacterModel) -> Unit) {
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(24))
             .border(2.dp, Color.Green, shape = RoundedCornerShape(0, 24, 0, 24))
             .fillMaxWidth()
-            .height(150.dp),
+            .height(150.dp)
+            .clickable { onItemSelected(characterModel) },
         contentAlignment = Alignment.BottomCenter
     ) {
         AsyncImage(

@@ -5,5 +5,6 @@ import com.ernesto.rickandmortycompose.feature.characters.data.remote.dto.respon
 interface CharactersLocalDataSource {
     fun getAllCharacters(page: Int): List<CharacterResponse>?
     fun saveCharacters(page: Int, characters: List<CharacterResponse>)
-
+    fun getCharacterById(id: Int): CharacterResponse?
+    fun saveCharacter(character: CharacterResponse)
 }

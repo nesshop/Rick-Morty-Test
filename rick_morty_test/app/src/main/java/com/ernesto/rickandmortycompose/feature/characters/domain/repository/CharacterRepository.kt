@@ -5,5 +5,6 @@ import com.ernesto.rickandmortycompose.feature.characters.domain.model.Character
 import kotlinx.coroutines.flow.Flow
 
 interface CharacterRepository {
-    fun getAllCharacters() : Flow<PagingData<CharacterModel>>
+    fun getAllCharacters(): Flow<PagingData<CharacterModel>>
+    suspend fun getCharacterById(id: Int): CharacterModel
 }

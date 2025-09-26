@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
+import com.ernesto.rickandmortycompose.core.navigation.NavigationWrapper
 import com.ernesto.rickandmortycompose.designsystem.theme.RickAndMortyComposeTheme
 import com.ernesto.rickandmortycompose.feature.characters.ui.characterlist.CharactersListScreen
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,7 +24,7 @@ class MainActivity : ComponentActivity() {
             RickAndMortyComposeTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Box(modifier = Modifier.padding(innerPadding)) {
-                        CharactersListScreen()
+                        NavigationWrapper()
                     }
                 }
             }
