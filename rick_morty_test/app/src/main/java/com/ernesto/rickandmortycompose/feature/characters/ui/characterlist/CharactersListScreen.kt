@@ -48,10 +48,6 @@ fun CharactersGridList(
     characters: LazyPagingItems<CharacterModel>,
     navigateToDetail: (CharacterModel) -> Unit
 ) {
-
-    RickAndMortyText(
-        stringResource(R.string.character_list_screen_title),
-    )
     LazyVerticalGrid(
         contentPadding = PaddingValues(16.dp),
         columns = GridCells.Fixed(2),

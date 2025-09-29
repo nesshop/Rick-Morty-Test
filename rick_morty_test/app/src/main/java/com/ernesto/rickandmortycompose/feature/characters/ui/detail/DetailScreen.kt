@@ -13,16 +13,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.ernesto.rickandmortycompose.designsystem.components.molecules.RickAndMortyError
+import com.ernesto.rickandmortycompose.designsystem.components.molecules.RickAndMortyLoading
+import com.ernesto.rickandmortycompose.designsystem.components.organisms.RickAndMortyHeader
+
 
 @Composable
 fun DetailScreen(
     detailViewModel: DetailViewModel = hiltViewModel(),
-    characterId: Int,
-    onBackPressed: () -> Unit
+    characterId: Int
 ) {
 
     val scrollState = rememberScrollState()
-    val character by detailViewModel.character.collectAsState()
+    val uiState by detailViewModel.uiState.collectAsState()
 
     LaunchedEffect(characterId) {
         detailViewModel.loadCharacter(characterId)
@@ -34,7 +37,21 @@ fun DetailScreen(
             .background(MaterialTheme.colorScheme.background)
             .verticalScroll(scrollState)
     ) {
+        when (uiState) {
+            is DetailUiState.Loading -> {
+                RickAndMortyLoading()
+            }
 
+            is DetailUiState.Success -> {
+                val character = (uiState as DetailUiState.Success).character
+                RickAndMortyHeader(character)
+            }
+
+            is DetailUiState.Error -> {
+                val message = (uiState as DetailUiState.Error).message
+                RickAndMortyError(message)
+            }
+        }
     }
 }
 
@@ -42,7 +59,5 @@ fun DetailScreen(
 @Composable
 fun ShowDetailScreen() {
     DetailScreen(
-        characterId = 1,
-        onBackPressed = {})
-
+        characterId = 1)
 }

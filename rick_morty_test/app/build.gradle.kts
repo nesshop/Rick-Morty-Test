@@ -72,6 +72,7 @@ dependencies {
     ksp(libs.hilt.compiler)
     implementation(libs.hilt.navigation)
     implementation(libs.androidx.paging.runtime.ktx)
+    implementation(libs.androidx.compose.material.icons.extended)
 
     testImplementation(libs.androidx.paging.common.ktx)
     testImplementation(libs.mockk)

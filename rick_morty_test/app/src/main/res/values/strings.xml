@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Rick And Morty Compose</string>
     <string name="character_list_screen_title">Characters</string>
+    <string name="character_detail_screen_title">Detail Character</string>
 </resources>
