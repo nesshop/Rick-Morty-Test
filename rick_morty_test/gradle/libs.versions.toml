@@ -22,6 +22,7 @@ pagingCommonKtx = "3.3.6"
 pagingRuntimeKtx = "3.3.6"
 navigationCompose = "2.9.5"
 material-icons-extended = "1.5.3"
+core-splashscreen = "1.0.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -62,6 +63,9 @@ hilt-navigation = { group = "androidx.hilt", name = "hilt-navigation-compose", v
 
 #Navigation
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
+
+#Splash
+core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "core-splashscreen" }
 
 #Testing
 androidx-paging-common-ktx = { group = "androidx.paging", name = "paging-common-ktx", version.ref = "pagingCommonKtx" }
