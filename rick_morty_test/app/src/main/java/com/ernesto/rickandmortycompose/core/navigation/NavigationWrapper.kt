@@ -1,5 +1,6 @@
 package com.ernesto.rickandmortycompose.core.navigation
 
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -11,12 +12,12 @@ import com.ernesto.rickandmortycompose.feature.characters.ui.characterlist.Chara
 import com.ernesto.rickandmortycompose.feature.characters.ui.detail.DetailScreen
 
 @Composable
-fun NavigationWrapper(navController: NavHostController) {
+fun NavigationWrapper(navController: NavHostController, onSetTopBarActions: ((@Composable RowScope.() -> Unit)?) -> Unit) {
     NavHost(navController = navController, startDestination = CharacterList) {
         composable<CharacterList> {
             CharactersListScreen(navigateToDetail = { character ->
                 navController.navigate(CharacterDetail(character.id))
-            })
+            }, onSetTopBarActions = onSetTopBarActions)
         }
         composable<CharacterDetail> { backStackEntry ->
             val args = backStackEntry.toRoute<CharacterDetail>()

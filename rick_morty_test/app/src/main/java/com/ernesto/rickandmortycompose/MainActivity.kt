@@ -5,22 +5,23 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -39,35 +40,52 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             RickAndMortyComposeTheme {
+                MainContent()
+            }
+        }
+    }
 
-                val navController = rememberNavController()
-                val navStackEntry by navController.currentBackStackEntryAsState()
-                val isDetailScreen =
-                    navStackEntry?.destination?.route?.contains("CharacterDetail") == true
+    @Composable
+    private fun MainContent() {
+        val navController = rememberNavController()
+        val navStackEntry by navController.currentBackStackEntryAsState()
+        val isDetailScreen =
+            navStackEntry?.destination?.route?.contains("CharacterDetail") == true
 
-                Scaffold(modifier = Modifier.fillMaxSize(), topBar = {
-                    TopAppBar(
-                        title = {
-                            if (isDetailScreen) RickAndMortyText(stringResource(R.string.character_detail_screen_title)) else RickAndMortyText(
-                                stringResource(R.string.character_list_screen_title)
-                            )
-                        },
-                        navigationIcon = {
-                            if (isDetailScreen) {
-                                IconButton(onClick = { navController.popBackStack() }) {
-                                    Icon(
-                                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                        contentDescription = "Back"
-                                    )
-                                }
-                            }
-                        }
+        var topBarActions by remember {
+            mutableStateOf<(@Composable RowScope.() -> Unit)?>(
+                null
+            )
+        }
+
+        Scaffold(modifier = Modifier.fillMaxSize(), topBar = {
+            TopAppBar(
+                title = {
+                    if (isDetailScreen) RickAndMortyText(stringResource(R.string.character_detail_screen_title)) else RickAndMortyText(
+                        stringResource(R.string.character_list_screen_title)
                     )
-                }) { innerPadding ->
-                    Box(modifier = Modifier.padding(innerPadding)) {
-                        NavigationWrapper(navController)
+                },
+                navigationIcon = {
+                    if (isDetailScreen) {
+                        IconButton(onClick = { navController.popBackStack() }) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = "Back"
+                            )
+                        }
                     }
+                },
+                actions = {
+                    topBarActions?.invoke(this)
                 }
+            )
+        }) { innerPadding ->
+            Box(modifier = Modifier.padding(innerPadding)) {
+                NavigationWrapper(
+                    navController,
+                    onSetTopBarActions = { actions ->
+                        topBarActions = actions
+                    })
             }
         }
     }
