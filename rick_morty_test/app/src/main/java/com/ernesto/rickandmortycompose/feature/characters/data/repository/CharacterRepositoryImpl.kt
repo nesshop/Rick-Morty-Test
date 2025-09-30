@@ -22,11 +22,14 @@ class CharacterRepositoryImpl @Inject constructor(
 
     companion object {
         const val MAX_ITEMS = 20
+        const val PREFETCH_DISTANCE = 5
     }
 
     override fun getAllCharacters(): Flow<PagingData<CharacterModel>> {
         return Pager(
-            config = PagingConfig(pageSize = MAX_ITEMS),
+            config = PagingConfig(pageSize = MAX_ITEMS,
+                prefetchDistance = PREFETCH_DISTANCE,
+                enablePlaceholders = false),
             pagingSourceFactory = {
                 CharactersPagingSource(
                     remoteDataSource,

@@ -55,23 +55,51 @@ class CharactersListViewModelTest {
             viewModel = CharactersListViewModel(useCase)
 
             //THEN
-            viewModel.characters.test {
-                val emitted = awaitItem()
+            viewModel.uiState.test {
+                assert(awaitItem() is CharactersUiState.Loading)
+                val successState = awaitItem()
+                assert(successState is CharactersUiState.Success)
 
-                val differ = AsyncPagingDataDiffer(
-                    diffCallback = CharacterModelDiffCallback(),
-                    updateCallback = object : ListUpdateCallback {
-                        override fun onInserted(position: Int, count: Int) {}
-                        override fun onRemoved(position: Int, count: Int) {}
-                        override fun onMoved(fromPosition: Int, toPosition: Int) {}
-                        override fun onChanged(position: Int, count: Int, payload: Any?) {}
-                    },
-                    mainDispatcher = testDispatcher,
-                    workerDispatcher = testDispatcher
-                )
-                differ.submitData(emitted)
-                advanceUntilIdle()
-                assertEquals(characters, differ.snapshot().items)
+                val pagingFlow = (successState as CharactersUiState.Success).characters
+
+                pagingFlow.test {
+                    val emitted = awaitItem()
+
+                    val differ = AsyncPagingDataDiffer(
+                        diffCallback = CharacterModelDiffCallback(),
+                        updateCallback = object : ListUpdateCallback {
+                            override fun onInserted(position: Int, count: Int) {}
+                            override fun onRemoved(position: Int, count: Int) {}
+                            override fun onMoved(fromPosition: Int, toPosition: Int) {}
+                            override fun onChanged(position: Int, count: Int, payload: Any?) {}
+                        },
+                        mainDispatcher = testDispatcher,
+                        workerDispatcher = testDispatcher
+                    )
+                    differ.submitData(emitted)
+                    advanceUntilIdle()
+                    assertEquals(characters, differ.snapshot().items)
+                    cancelAndConsumeRemainingEvents()
+                }
+                cancelAndConsumeRemainingEvents()
+            }
+        }
+
+    @Test
+    fun `GIVEN use case throws exception WHEN viewModel is created THEN uiState is Error`() =
+        runTest {
+            //GIVEN
+            coEvery { useCase() } throws RuntimeException("Network error")
+
+            //WHEN
+            viewModel = CharactersListViewModel(useCase)
+
+            //THEN
+            viewModel.uiState.test {
+                assert(awaitItem() is CharactersUiState.Loading)
+                val errorState = awaitItem()
+                assert(errorState is CharactersUiState.Error)
+                assertEquals("Network error", (errorState as CharactersUiState.Error).message)
                 cancelAndConsumeRemainingEvents()
             }
         }

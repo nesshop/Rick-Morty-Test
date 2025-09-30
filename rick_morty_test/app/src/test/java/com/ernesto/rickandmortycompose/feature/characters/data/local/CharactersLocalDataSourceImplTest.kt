@@ -1,55 +1,53 @@
 package com.ernesto.rickandmortycompose.feature.characters.data.local
 
 import com.ernesto.rickandmortycompose.feature.characters.data.remote.dto.response.CharacterResponse
-import kotlinx.coroutines.test.runTest
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Before
 import org.junit.Test
 
 class CharactersLocalDataSourceImplTest {
 
-    private val localDataSource = CharactersLocalDataSourceImpl()
+    private lateinit var localDataSource: CharactersLocalDataSourceImpl
 
-    @Test
-    fun `GIVEN empty cache WHEN getAllCharacters THEN returns null`() = runTest {
-        //GIVEN
-        val page = 1
-
-        //WHEN
-        val result = localDataSource.getAllCharacters(page)
-
-        //THEN
-        assertNull(result)
+    @Before
+    fun setup() {
+        localDataSource = CharactersLocalDataSourceImpl()
     }
 
     @Test
-    fun `GIVEN characters saved in cache WHEN getAllCharacters THEN returns same characters`() = runTest {
-        // GIVEN
-        val page = 1
+    fun `GIVEN characters saved THEN getAllCharacters returns them`() {
         val characters = listOf(
-            CharacterResponse(1, "Rick", "Alive", "Human", "", "Male", "url1")
+            CharacterResponse(1, "Rick", "Alive", "Human", "", "Male", "url1"),
+            CharacterResponse(2, "Morty", "Alive", "Human", "", "Male", "url2")
         )
-        localDataSource.saveCharacters(page, characters)
 
-        // WHEN
-        val result = localDataSource.getAllCharacters(page)
+        localDataSource.saveCharacters(page = 1, characters = characters)
 
-        // THEN
+        val result = localDataSource.getAllCharacters(1)
         assertEquals(characters, result)
     }
 
     @Test
-    fun `GIVEN characters saved for page 1 WHEN save different characters for same page THEN overwrites cache`() = runTest {
-        // GIVEN
-        val page = 1
-        val characters1 = listOf(CharacterResponse(1, "Rick", "Alive", "Human", "", "Male", "url1"))
-        val characters2 = listOf(CharacterResponse(2, "Morty", "Alive", "Human", "", "Male", "url2"))
-        localDataSource.saveCharacters(page, characters1)
+    fun `GIVEN characters saved THEN getCharacterById returns correct character`() {
+        val character = CharacterResponse(1, "Rick", "Alive", "Human", "", "Male", "url1")
+        localDataSource.saveCharacter(character)
 
-        // WHEN
-        localDataSource.saveCharacters(page, characters2)
-        val result = localDataSource.getAllCharacters(page)
+        val result = localDataSource.getCharacterById(1)
+        assertEquals(character, result)
+    }
 
-        // THEN
-        assertEquals(characters2, result)
+    @Test
+    fun `GIVEN page saved THEN getCharacterById returns correct character from cacheById`() {
+        val characters = listOf(
+            CharacterResponse(1, "Rick", "Alive", "Human", "", "Male", "url1"),
+            CharacterResponse(2, "Morty", "Alive", "Human", "", "Male", "url2")
+        )
+        localDataSource.saveCharacters(page = 1, characters = characters)
+
+        val rick = localDataSource.getCharacterById(1)
+        val morty = localDataSource.getCharacterById(2)
+
+        assertEquals(characters[0], rick)
+        assertEquals(characters[1], morty)
     }
 }

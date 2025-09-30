@@ -39,9 +39,9 @@ import com.ernesto.rickandmortycompose.designsystem.components.atoms.RickAndMort
 import com.ernesto.rickandmortycompose.designsystem.components.molecules.RickAndMortyError
 import com.ernesto.rickandmortycompose.designsystem.components.molecules.RickAndMortyLoading
 import com.ernesto.rickandmortycompose.designsystem.theme.LightGray
-import com.ernesto.rickandmortycompose.feature.characters.Constants.Alive
-import com.ernesto.rickandmortycompose.feature.characters.Constants.Dead
-import com.ernesto.rickandmortycompose.feature.characters.Constants.Unknown
+import com.ernesto.rickandmortycompose.feature.characters.Constants.ALIVE
+import com.ernesto.rickandmortycompose.feature.characters.Constants.DEAD
+import com.ernesto.rickandmortycompose.feature.characters.Constants.UNKNOWN
 import com.ernesto.rickandmortycompose.feature.characters.domain.model.CharacterModel
 
 @Composable
@@ -112,9 +112,9 @@ fun CharacterItem(
     onItemSelected: (CharacterModel) -> Unit
 ) {
     val borderColor = when {
-        characterModel.status.equals(Alive, ignoreCase = true) -> MaterialTheme.colorScheme.primary
-        characterModel.status.equals(Dead, ignoreCase = true) -> Color.Red
-        characterModel.status.equals(Unknown, ignoreCase = true) -> Color.Yellow
+        characterModel.status.equals(ALIVE, ignoreCase = true) -> MaterialTheme.colorScheme.primary
+        characterModel.status.equals(DEAD, ignoreCase = true) -> Color.Red
+        characterModel.status.equals(UNKNOWN, ignoreCase = true) -> Color.Yellow
         else -> Color.Gray
     }
     Column(
