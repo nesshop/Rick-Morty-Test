@@ -18,6 +18,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,12 +29,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.ernesto.rickandmortycompose.designsystem.components.atoms.RickAndMortyText
+import com.ernesto.rickandmortycompose.designsystem.components.molecules.RickAndMortyError
+import com.ernesto.rickandmortycompose.designsystem.components.molecules.RickAndMortyLoading
 import com.ernesto.rickandmortycompose.designsystem.theme.LightGray
 import com.ernesto.rickandmortycompose.feature.characters.Constants.Alive
 import com.ernesto.rickandmortycompose.feature.characters.Constants.Dead
@@ -44,8 +49,35 @@ fun CharactersListScreen(
     viewModel: CharactersListViewModel = hiltViewModel(),
     navigateToDetail: (CharacterModel) -> Unit
 ) {
-    val characters = viewModel.characters.collectAsLazyPagingItems()
-    CharactersGridList(characters = characters, navigateToDetail = navigateToDetail)
+    val uiState by viewModel.uiState.collectAsState()
+
+    when (uiState) {
+        is CharactersUiState.Loading -> {
+            RickAndMortyLoading()
+        }
+
+        is CharactersUiState.Success -> {
+            val characters =
+                (uiState as CharactersUiState.Success).characters.collectAsLazyPagingItems()
+
+            when (val refreshLoadState = characters.loadState.refresh) {
+                is LoadState.Loading -> RickAndMortyLoading()
+                is LoadState.Error -> {
+                    val message = refreshLoadState.error.message ?: "Error loading characters list"
+                    RickAndMortyError(message)
+                }
+
+                else -> {
+                    CharactersGridList(characters = characters, navigateToDetail = navigateToDetail)
+                }
+            }
+        }
+
+        is CharactersUiState.Error -> {
+            val message = (uiState as CharactersUiState.Error).message
+            RickAndMortyError(message)
+        }
+    }
 }
 
 @Composable
@@ -53,7 +85,11 @@ fun CharactersGridList(
     characters: LazyPagingItems<CharacterModel>,
     navigateToDetail: (CharacterModel) -> Unit
 ) {
-    HorizontalDivider(modifier = Modifier.fillMaxWidth(), thickness = 0.2.dp, color = MaterialTheme.colorScheme.primary)
+    HorizontalDivider(
+        modifier = Modifier.fillMaxWidth(),
+        thickness = 0.2.dp,
+        color = MaterialTheme.colorScheme.primary
+    )
     LazyVerticalGrid(
         contentPadding = PaddingValues(16.dp),
         columns = GridCells.Fixed(2),
