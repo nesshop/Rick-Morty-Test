@@ -14,3 +14,5 @@ val LightAqua = Color(0xFF4DD6C1)
 val OffWhite = Color(0xFFF9FFF9)
 val MintWhite = Color(0xFFE6F4EC)
 val DarkGray = Color(0xFF0D0D0D)
+
+val LightGray = Color(0xFFC4C4C4)

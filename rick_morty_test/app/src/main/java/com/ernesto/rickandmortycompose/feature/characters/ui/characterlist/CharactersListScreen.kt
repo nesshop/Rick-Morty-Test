@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -32,6 +33,10 @@ import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.ernesto.rickandmortycompose.designsystem.components.atoms.RickAndMortyText
+import com.ernesto.rickandmortycompose.designsystem.theme.LightGray
+import com.ernesto.rickandmortycompose.feature.characters.Constants.Alive
+import com.ernesto.rickandmortycompose.feature.characters.Constants.Dead
+import com.ernesto.rickandmortycompose.feature.characters.Constants.Unknown
 import com.ernesto.rickandmortycompose.feature.characters.domain.model.CharacterModel
 
 @Composable
@@ -70,6 +75,12 @@ fun CharacterItem(
     characterModel: CharacterModel,
     onItemSelected: (CharacterModel) -> Unit
 ) {
+    val borderColor = when {
+        characterModel.status.equals(Alive, ignoreCase = true) -> MaterialTheme.colorScheme.primary
+        characterModel.status.equals(Dead, ignoreCase = true) -> Color.Red
+        characterModel.status.equals(Unknown, ignoreCase = true) -> Color.Yellow
+        else -> Color.Gray
+    }
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -80,7 +91,7 @@ fun CharacterItem(
             modifier = Modifier
                 .size(120.dp)
                 .clip(CircleShape)
-                .border(2.dp, MaterialTheme.colorScheme.primary, CircleShape),
+                .border(2.dp, borderColor, CircleShape),
             contentAlignment = Alignment.Center
         ) {
             AsyncImage(
@@ -102,7 +113,7 @@ fun CharacterItem(
         Spacer(modifier = Modifier.height(8.dp))
         RickAndMortyText(
             text = characterModel.species,
-            color = MaterialTheme.colorScheme.onBackground
+            color = LightGray
         )
     }
 }

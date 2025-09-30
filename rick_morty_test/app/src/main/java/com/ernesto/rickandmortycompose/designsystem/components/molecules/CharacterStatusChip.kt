@@ -16,13 +16,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.ernesto.rickandmortycompose.designsystem.components.atoms.RickAndMortyText
+import com.ernesto.rickandmortycompose.feature.characters.Constants.Alive
+import com.ernesto.rickandmortycompose.feature.characters.Constants.Dead
+import com.ernesto.rickandmortycompose.feature.characters.Constants.Unknown
 
 @Composable
 fun CharacterStatusChip(status: String, modifier: Modifier = Modifier) {
     val backgroundColor = when {
-        status.equals("Alive", ignoreCase = true) -> Color.Green
-        status.equals("Dead", ignoreCase = true) -> Color.Red
-        status.equals("Unknown", ignoreCase = true) -> Color.Yellow
+        status.equals(Alive, ignoreCase = true) -> Color.Green
+        status.equals(Dead, ignoreCase = true) -> Color.Red
+        status.equals(Unknown, ignoreCase = true) -> Color.Yellow
         else -> Color.Gray
     }
 
