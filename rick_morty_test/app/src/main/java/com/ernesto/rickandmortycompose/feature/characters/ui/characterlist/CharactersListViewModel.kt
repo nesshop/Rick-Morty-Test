@@ -38,25 +38,11 @@ class CharactersListViewModel @Inject constructor(
             searchQuery
                 .debounce(300)
                 .distinctUntilChanged()
-                .collectLatest{ query ->
-                    loadCharacters(query)
+                .collectLatest { query ->
+                    val flow = if (query.isBlank()) getAllCharactersUseCase()
+                    else searchCharactersUseCase(query)
+                    _uiState.value = CharactersUiState.Success(flow.cachedIn(viewModelScope))
                 }
-        }
-    }
-
-    private fun loadCharacters(query: String) {
-
-        try {
-            _uiState.value = CharactersUiState.Loading
-
-            val characters = if (query.isBlank()) {
-                getAllCharactersUseCase()
-            } else {
-                searchCharactersUseCase(query)
-            }.cachedIn(viewModelScope)
-            _uiState.value = CharactersUiState.Success(characters)
-        } catch (exception: Exception) {
-            _uiState.value = CharactersUiState.Error(exception.message ?: "Error loading characters list")
         }
     }
 

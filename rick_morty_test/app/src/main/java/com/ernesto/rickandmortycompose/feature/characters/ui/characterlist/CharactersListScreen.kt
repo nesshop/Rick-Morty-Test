@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -125,6 +126,7 @@ fun CharactersListScreen(
                     else -> {
                         CharactersGridList(
                             characters = characters,
+                            searchQuery = searchQuery,
                             navigateToDetail = navigateToDetail
                         )
                     }
@@ -142,16 +144,25 @@ fun CharactersListScreen(
 @Composable
 fun CharactersGridList(
     characters: LazyPagingItems<CharacterModel>,
+    searchQuery: String,
     navigateToDetail: (CharacterModel) -> Unit
 ) {
-
+    val filteredList = remember(characters.itemSnapshotList, searchQuery) {
+        if (searchQuery.isBlank()) {
+            characters.itemSnapshotList.items
+        } else {
+            characters.itemSnapshotList.items.filter { character ->
+                character.name.contains(searchQuery, ignoreCase = true)
+            }
+        }
+    }
     Column {
         HorizontalDivider(
             modifier = Modifier.fillMaxWidth(),
             thickness = 0.2.dp,
             color = MaterialTheme.colorScheme.primary
         )
-        if (characters.itemCount == 0 && characters.loadState.refresh is LoadState.Loading) {
+        if (filteredList.isEmpty() && searchQuery.isNotBlank()) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -171,13 +182,17 @@ fun CharactersGridList(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                items(
-                    characters.itemCount,
-                    key = { index -> characters[index]?.id ?: index }) { index ->
+                items(characters.itemCount) { index ->
                     characters[index]?.let { character ->
-                        CharacterItem(
-                            character,
-                            onItemSelected = { characterModel -> navigateToDetail(characterModel) })
+                        if (searchQuery.isBlank() || character.name.contains(
+                                searchQuery,
+                                ignoreCase = true
+                            )
+                        ) {
+                            CharacterItem(
+                                character,
+                                onItemSelected = { characterModel -> navigateToDetail(characterModel) })
+                        }
                     }
                 }
             }

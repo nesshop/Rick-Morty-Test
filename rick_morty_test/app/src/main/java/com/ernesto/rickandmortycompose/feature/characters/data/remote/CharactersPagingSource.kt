@@ -5,6 +5,7 @@ import androidx.paging.PagingState
 import com.ernesto.rickandmortycompose.feature.characters.data.local.CharactersLocalDataSource
 import com.ernesto.rickandmortycompose.feature.characters.data.remote.dto.response.toDomain
 import com.ernesto.rickandmortycompose.feature.characters.domain.model.CharacterModel
+import retrofit2.HttpException
 
 class CharactersPagingSource(
     private val remoteDataSource: CharactersRemoteDataSource,
@@ -20,13 +21,12 @@ class CharactersPagingSource(
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, CharacterModel> {
-        return try {
-            val page = params.key ?: 1
-            val prev = if (page > 1) page - 1 else null
+        val page = params.key ?: 1
+        val prev = if (page > 1) page - 1 else null
 
+        return try {
             if (searchQuery.isNullOrBlank()) {
-                val cachedCharacters = localDataSource.getAllCharacters(page)
-                if (cachedCharacters != null) {
+                localDataSource.getAllCharacters(page)?.let { cachedCharacters ->
                     return LoadResult.Page(
                         data = cachedCharacters.map { cached -> cached.toDomain() },
                         prevKey = prev,
@@ -35,11 +35,26 @@ class CharactersPagingSource(
                 }
             }
 
-            val response = remoteDataSource.getAllCharacters(page, searchQuery)
+            val response = try {
+                remoteDataSource.getAllCharacters(page, searchQuery)
+            } catch (e: HttpException) {
+                if (e.code() == 404) {
+                    return LoadResult.Page(
+                        data = emptyList(),
+                        prevKey = prev,
+                        nextKey = null
+                    )
+                } else {
+                    throw e
+                }
+            }
+
             val characters = response.results
 
             if (searchQuery.isNullOrBlank()) {
                 localDataSource.saveCharacters(page, characters)
+            } else {
+                characters.forEach { localDataSource.saveCharacter(it) }
             }
 
             val next = if (response.info.next != null) page + 1 else null
