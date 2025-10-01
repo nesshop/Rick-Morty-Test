@@ -8,11 +8,15 @@ import com.ernesto.rickandmortycompose.feature.characters.domain.model.Character
 
 class CharactersPagingSource(
     private val remoteDataSource: CharactersRemoteDataSource,
-    private val localDataSource: CharactersLocalDataSource
+    private val localDataSource: CharactersLocalDataSource,
+    private val searchQuery: String? = null
 ) : PagingSource<Int, CharacterModel>() {
 
     override fun getRefreshKey(state: PagingState<Int, CharacterModel>): Int? {
-        return state.anchorPosition
+        return state.anchorPosition?.let { anchorPosition ->
+            state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
+                ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)
+        }
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, CharacterModel> {
@@ -20,18 +24,24 @@ class CharactersPagingSource(
             val page = params.key ?: 1
             val prev = if (page > 1) page - 1 else null
 
-            val cachedCharacters = localDataSource.getAllCharacters(page)
-            if (cachedCharacters != null) {
-                return LoadResult.Page(
-                    data = cachedCharacters.map { cached -> cached.toDomain() },
-                    prevKey = prev,
-                    nextKey = if (cachedCharacters.isNotEmpty()) page + 1 else null
-                )
+            if (searchQuery.isNullOrBlank()) {
+                val cachedCharacters = localDataSource.getAllCharacters(page)
+                if (cachedCharacters != null) {
+                    return LoadResult.Page(
+                        data = cachedCharacters.map { cached -> cached.toDomain() },
+                        prevKey = prev,
+                        nextKey = if (cachedCharacters.isNotEmpty()) page + 1 else null
+                    )
+                }
             }
-            val response = remoteDataSource.getAllCharacters(page)
+
+            val response = remoteDataSource.getAllCharacters(page, searchQuery)
             val characters = response.results
 
-            localDataSource.saveCharacters(page, characters)
+            if (searchQuery.isNullOrBlank()) {
+                localDataSource.saveCharacters(page, characters)
+            }
+
             val next = if (response.info.next != null) page + 1 else null
 
             LoadResult.Page(

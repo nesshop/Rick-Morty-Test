@@ -6,7 +6,6 @@ import androidx.paging.PagingData
 import com.ernesto.rickandmortycompose.feature.characters.data.local.CharactersLocalDataSource
 import com.ernesto.rickandmortycompose.feature.characters.data.remote.CharactersPagingSource
 import com.ernesto.rickandmortycompose.feature.characters.data.remote.CharactersRemoteDataSource
-import com.ernesto.rickandmortycompose.feature.characters.data.remote.dto.response.CharacterResponse
 import com.ernesto.rickandmortycompose.feature.characters.data.remote.dto.response.toDomain
 import com.ernesto.rickandmortycompose.feature.characters.domain.model.CharacterModel
 import com.ernesto.rickandmortycompose.feature.characters.domain.repository.CharacterRepository
@@ -27,13 +26,16 @@ class CharacterRepositoryImpl @Inject constructor(
 
     override fun getAllCharacters(): Flow<PagingData<CharacterModel>> {
         return Pager(
-            config = PagingConfig(pageSize = MAX_ITEMS,
+            config = PagingConfig(
+                pageSize = MAX_ITEMS,
                 prefetchDistance = PREFETCH_DISTANCE,
-                enablePlaceholders = false),
+                initialLoadSize = MAX_ITEMS,
+                enablePlaceholders = false
+            ),
             pagingSourceFactory = {
                 CharactersPagingSource(
-                    remoteDataSource,
-                    localDataSource
+                    remoteDataSource = remoteDataSource,
+                    localDataSource = localDataSource
                 )
             }).flow
     }
@@ -50,5 +52,23 @@ class CharacterRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             localDataSource.getCharacterById(id)?.toDomain() ?: throw e
         }
+    }
+
+    override fun searchCharacters(query: String): Flow<PagingData<CharacterModel>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = MAX_ITEMS,
+                prefetchDistance = PREFETCH_DISTANCE,
+                initialLoadSize = MAX_ITEMS,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = {
+                CharactersPagingSource(
+                    remoteDataSource = remoteDataSource,
+                    localDataSource = localDataSource,
+                    searchQuery = query
+                )
+            }
+        ).flow
     }
 }

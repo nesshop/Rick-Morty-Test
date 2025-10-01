@@ -4,16 +4,22 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.ernesto.rickandmortycompose.feature.characters.domain.usecase.GetAllCharactersUseCase
+import com.ernesto.rickandmortycompose.feature.characters.domain.usecase.SearchCharactersUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CharactersListViewModel @Inject constructor(
-    getAllCharactersUseCase: GetAllCharactersUseCase
+    private val getAllCharactersUseCase: GetAllCharactersUseCase,
+    private val searchCharactersUseCase: SearchCharactersUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<CharactersUiState>(CharactersUiState.Loading)
@@ -23,17 +29,34 @@ class CharactersListViewModel @Inject constructor(
     val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
 
     init {
-        loadCharacters(getAllCharactersUseCase)
+        observeSearchQuery()
     }
 
-    private fun loadCharacters(getAllCharactersUseCase: GetAllCharactersUseCase) {
+    @OptIn(FlowPreview::class)
+    private fun observeSearchQuery() {
         viewModelScope.launch {
-            try {
-                val characters = getAllCharactersUseCase().cachedIn(viewModelScope)
-                _uiState.value = CharactersUiState.Success(characters)
-                } catch (exception: Exception) {
-                _uiState.value = CharactersUiState.Error(exception.message ?: "Error loading characters list")
-            }
+            searchQuery
+                .debounce(300)
+                .distinctUntilChanged()
+                .collectLatest{ query ->
+                    loadCharacters(query)
+                }
+        }
+    }
+
+    private fun loadCharacters(query: String) {
+
+        try {
+            _uiState.value = CharactersUiState.Loading
+
+            val characters = if (query.isBlank()) {
+                getAllCharactersUseCase()
+            } else {
+                searchCharactersUseCase(query)
+            }.cachedIn(viewModelScope)
+            _uiState.value = CharactersUiState.Success(characters)
+        } catch (exception: Exception) {
+            _uiState.value = CharactersUiState.Error(exception.message ?: "Error loading characters list")
         }
     }
 
