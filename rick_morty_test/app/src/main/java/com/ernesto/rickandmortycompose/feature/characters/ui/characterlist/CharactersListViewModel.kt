@@ -39,9 +39,13 @@ class CharactersListViewModel @Inject constructor(
                 .debounce(300)
                 .distinctUntilChanged()
                 .collectLatest { query ->
-                    val flow = if (query.isBlank()) getAllCharactersUseCase()
-                    else searchCharactersUseCase(query)
-                    _uiState.value = CharactersUiState.Success(flow.cachedIn(viewModelScope))
+                    try {
+                        val flow = if (query.isBlank()) getAllCharactersUseCase()
+                        else searchCharactersUseCase(query)
+                        _uiState.value = CharactersUiState.Success(flow.cachedIn(viewModelScope))
+                    } catch (exception: Exception) {
+                        _uiState.value = CharactersUiState.Error(exception.message ?: "Unknown error")
+                    }
                 }
         }
     }
