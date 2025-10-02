@@ -1,9 +1,30 @@
 <resources>
+    <!--App -->
     <string name="app_name">Rick And Morty Compose</string>
-    <string name="character_list_screen_title">Characters</string>
-    <string name="character_detail_screen_title">Detail Character</string>
+
+    <!--Character Detail -->
     <string name="character_detail_gender_title">Gender</string>
-    <string name="character_detail_screen_about_title">About</string>
     <string name="character_detail_screen_about_description">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</string>
+    <string name="character_detail_screen_about_title">About</string>
     <string name="character_detail_screen_text_button">See Episodes</string>
+    <string name="character_detail_screen_title">Detail Character</string>
+
+    <!--Character List -->
+    <string name="character_list_screen_character_content_description">Character</string>
+    <string name="character_list_screen_close_search_content_description">Close search</string>
+    <string name="character_list_screen_loading_error_message">Error loading characters list</string>
+    <string name="character_list_screen_no_result_text">No results found</string>
+    <string name="character_list_screen_search_content_description">Search</string>
+    <string name="character_list_screen_title">Characters</string>
+    <string name="character_list_screen_try_another_search_text">Try another search</string>
+    <string name="rick_morty_header_character_content_description">Character</string>
+
+    <!--Search Bar-->
+    <string name="rick_morty_search_bar_content_description_clear_search">Clear search</string>
+    <string name="rick_morty_search_bar_placeholder_text">Search characters</string>
+    <string name="rick_morty_search_bar_search_content_description_icon">Search</string>
+
+    <!--ViewModel Errors -->
+    <string name="character_list_view_model_unknow_error_text">Unknown error</string>
+    <string name="characters_detail_view_model_loading_error_text">Error loading character detail</string>
 </resources>

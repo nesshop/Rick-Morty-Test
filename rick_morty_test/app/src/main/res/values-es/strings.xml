@@ -1,0 +1,30 @@
+<resources>
+    <!--App -->
+    <string name="app_name">Rick And Morty Compose</string>
+
+    <!--Character Detail -->
+    <string name="character_detail_gender_title">Género</string>
+    <string name="character_detail_screen_about_description">Lorem Ipsum es simplemente un texto de relleno de la industria de la impresión y la composición.</string>
+    <string name="character_detail_screen_about_title">Acerca de</string>
+    <string name="character_detail_screen_text_button">Ver episodios</string>
+    <string name="character_detail_screen_title">Detalle del personaje</string>
+
+    <!--Character List -->
+    <string name="character_list_screen_character_content_description">Personaje</string>
+    <string name="character_list_screen_close_search_content_description">Cerrar búsqueda</string>
+    <string name="character_list_screen_loading_error_message">Error al cargar la lista de personajes</string>
+    <string name="character_list_screen_no_result_text">No se encontraron resultados</string>
+    <string name="character_list_screen_search_content_description">Buscar</string>
+    <string name="character_list_screen_title">Personajes</string>
+    <string name="character_list_screen_try_another_search_text">Prueba con otra búsqueda</string>
+    <string name="rick_morty_header_character_content_description">Personaje</string>
+
+    <!--Search Bar-->
+    <string name="rick_morty_search_bar_content_description_clear_search">Borrar búsqueda</string>
+    <string name="rick_morty_search_bar_placeholder_text">Buscar personajes</string>
+    <string name="rick_morty_search_bar_search_content_description_icon">Buscar</string>
+
+    <!--ViewModel Errors -->
+    <string name="character_list_view_model_unknow_error_text">Error desconocido</string>
+    <string name="characters_detail_view_model_loading_error_text">Error al cargar el detalle del personaje</string>
+</resources>

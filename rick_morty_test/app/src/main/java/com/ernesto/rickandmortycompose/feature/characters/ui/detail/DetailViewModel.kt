@@ -1,16 +1,22 @@
 package com.ernesto.rickandmortycompose.feature.characters.ui.detail
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ernesto.rickandmortycompose.R
 import com.ernesto.rickandmortycompose.feature.characters.domain.usecase.GetCharacterByIdUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class DetailViewModel @Inject constructor(private val getCharacterByIdUseCase: GetCharacterByIdUseCase) :
+class DetailViewModel @Inject constructor(
+    private val getCharacterByIdUseCase: GetCharacterByIdUseCase,
+    @ApplicationContext private val context: Context
+) :
     ViewModel() {
 
     private val _uiState = MutableStateFlow<DetailUiState>(DetailUiState.Loading)
@@ -23,7 +29,10 @@ class DetailViewModel @Inject constructor(private val getCharacterByIdUseCase: G
                 val result = getCharacterByIdUseCase(id)
                 _uiState.value = DetailUiState.Success(result)
             } catch (e: Exception) {
-                _uiState.value = DetailUiState.Error(e.message ?: "Error loading character detail")
+                _uiState.value = DetailUiState.Error(
+                    e.message
+                        ?: context.getString(R.string.characters_detail_view_model_loading_error_text)
+                )
             }
         }
     }

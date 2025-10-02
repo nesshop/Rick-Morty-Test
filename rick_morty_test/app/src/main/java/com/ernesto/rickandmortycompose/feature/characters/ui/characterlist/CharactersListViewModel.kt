@@ -1,11 +1,14 @@
 package com.ernesto.rickandmortycompose.feature.characters.ui.characterlist
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
+import com.ernesto.rickandmortycompose.R
 import com.ernesto.rickandmortycompose.feature.characters.domain.usecase.GetAllCharactersUseCase
 import com.ernesto.rickandmortycompose.feature.characters.domain.usecase.SearchCharactersUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,7 +22,8 @@ import javax.inject.Inject
 @HiltViewModel
 class CharactersListViewModel @Inject constructor(
     private val getAllCharactersUseCase: GetAllCharactersUseCase,
-    private val searchCharactersUseCase: SearchCharactersUseCase
+    private val searchCharactersUseCase: SearchCharactersUseCase,
+    @ApplicationContext private val context: Context
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<CharactersUiState>(CharactersUiState.Loading)
@@ -44,7 +48,9 @@ class CharactersListViewModel @Inject constructor(
                         else searchCharactersUseCase(query)
                         _uiState.value = CharactersUiState.Success(flow.cachedIn(viewModelScope))
                     } catch (exception: Exception) {
-                        _uiState.value = CharactersUiState.Error(exception.message ?: "Unknown error")
+                        _uiState.value = CharactersUiState.Error(exception.message ?: context.getString(
+                            R.string.character_list_view_model_unknow_error_text
+                        ))
                     }
                 }
         }
