@@ -1,5 +1,6 @@
 package com.ernesto.rickandmortycompose.feature.characters.ui.characterlist
 
+import android.content.Context
 import androidx.paging.AsyncPagingDataDiffer
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.ListUpdateCallback
@@ -32,12 +33,14 @@ class CharactersListViewModelTest {
     private lateinit var getAllCharactersUseCase: GetAllCharactersUseCase
     private lateinit var searchCharactersUseCase: SearchCharactersUseCase
     private lateinit var viewModel: CharactersListViewModel
+    private lateinit var context : Context
 
     @Before
     fun setup() {
         Dispatchers.setMain(testDispatcher)
         getAllCharactersUseCase = mockk()
         searchCharactersUseCase = mockk()
+        context = mockk()
     }
 
     @After
@@ -58,7 +61,7 @@ class CharactersListViewModelTest {
             coEvery { searchCharactersUseCase(any()) } returns flowOf(PagingData.empty())
 
             //WHEN
-            viewModel = CharactersListViewModel(getAllCharactersUseCase, searchCharactersUseCase)
+            viewModel = CharactersListViewModel(getAllCharactersUseCase, searchCharactersUseCase, context)
             advanceUntilIdle()
 
             //THEN
@@ -99,7 +102,7 @@ class CharactersListViewModelTest {
             coEvery { searchCharactersUseCase(any()) } returns flowOf(PagingData.empty())
 
             //WHEN
-            viewModel = CharactersListViewModel(getAllCharactersUseCase, searchCharactersUseCase)
+            viewModel = CharactersListViewModel(getAllCharactersUseCase, searchCharactersUseCase, context)
             advanceUntilIdle()
 
             //THEN
@@ -124,7 +127,7 @@ class CharactersListViewModelTest {
             coEvery { getAllCharactersUseCase() } returns flowOf(expectedPagingData)
 
             //WHEN
-            viewModel = CharactersListViewModel(getAllCharactersUseCase, searchCharactersUseCase)
+            viewModel = CharactersListViewModel(getAllCharactersUseCase, searchCharactersUseCase, context)
             advanceUntilIdle()
 
             //THEN
@@ -147,7 +150,7 @@ class CharactersListViewModelTest {
             coEvery { getAllCharactersUseCase() } returns flowOf(PagingData.empty())
             coEvery { searchCharactersUseCase(query) } returns flowOf(expectedPagingData)
 
-            viewModel = CharactersListViewModel(getAllCharactersUseCase, searchCharactersUseCase)
+            viewModel = CharactersListViewModel(getAllCharactersUseCase, searchCharactersUseCase, context)
             advanceUntilIdle()
 
             //WHEN
@@ -167,7 +170,7 @@ class CharactersListViewModelTest {
             coEvery { getAllCharactersUseCase() } returns flowOf(PagingData.empty())
             coEvery { searchCharactersUseCase(query) } returns flowOf(PagingData.empty())
 
-            viewModel = CharactersListViewModel(getAllCharactersUseCase, searchCharactersUseCase)
+            viewModel = CharactersListViewModel(getAllCharactersUseCase, searchCharactersUseCase, context)
             advanceUntilIdle()
             viewModel.updateSearchQuery(query)
             advanceUntilIdle()
@@ -189,7 +192,7 @@ class CharactersListViewModelTest {
             coEvery { getAllCharactersUseCase() } returns flowOf(PagingData.empty())
             coEvery { searchCharactersUseCase(any()) } returns flowOf(PagingData.empty())
 
-            viewModel = CharactersListViewModel(getAllCharactersUseCase, searchCharactersUseCase)
+            viewModel = CharactersListViewModel(getAllCharactersUseCase, searchCharactersUseCase, context)
             advanceUntilIdle()
 
             //WHEN
@@ -217,7 +220,7 @@ class CharactersListViewModelTest {
             coEvery { getAllCharactersUseCase() } returns flowOf(PagingData.empty())
             coEvery { searchCharactersUseCase(query) } returns flowOf(PagingData.empty())
 
-            viewModel = CharactersListViewModel(getAllCharactersUseCase, searchCharactersUseCase)
+            viewModel = CharactersListViewModel(getAllCharactersUseCase, searchCharactersUseCase, context)
             advanceUntilIdle()
 
             //WHEN
@@ -236,7 +239,7 @@ class CharactersListViewModelTest {
             //GIVEN
             coEvery { getAllCharactersUseCase() } returns flowOf(PagingData.empty())
 
-            viewModel = CharactersListViewModel(getAllCharactersUseCase, searchCharactersUseCase)
+            viewModel = CharactersListViewModel(getAllCharactersUseCase, searchCharactersUseCase, context)
             advanceUntilIdle()
 
             //WHEN

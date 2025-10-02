@@ -1,5 +1,6 @@
 package com.ernesto.rickandmortycompose.feature.characters.ui.detail
 
+import android.content.Context
 import app.cash.turbine.test
 import com.ernesto.rickandmortycompose.feature.characters.domain.model.CharacterModel
 import com.ernesto.rickandmortycompose.feature.characters.domain.usecase.GetCharacterByIdUseCase
@@ -23,12 +24,14 @@ class DetailViewModelTest {
     private val testDispatcher = StandardTestDispatcher()
     private lateinit var useCase: GetCharacterByIdUseCase
     private lateinit var viewModel: DetailViewModel
+    private lateinit var context: Context
 
     @Before
     fun setup() {
         Dispatchers.setMain(testDispatcher)
         useCase = mockk()
-        viewModel = DetailViewModel(useCase)
+        context = mockk()
+        viewModel = DetailViewModel(useCase, context  )
     }
 
     @After
