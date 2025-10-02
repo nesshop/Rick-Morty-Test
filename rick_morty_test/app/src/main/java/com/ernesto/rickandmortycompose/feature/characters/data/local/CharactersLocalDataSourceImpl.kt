@@ -24,7 +24,7 @@ class CharactersLocalDataSourceImpl @Inject constructor() : CharactersLocalDataS
     }
 
     override fun getCharacterById(id: Int): CharacterResponse? {
-        return cacheById[id] ?: cache.values.flatten().firstOrNull { it.id == id }
+        return cacheById[id]
     }
 
     override fun saveCharacter(character: CharacterResponse) {
