@@ -4,17 +4,19 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,6 +29,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.ernesto.rickandmortycompose.core.navigation.NavigationWrapper
 import com.ernesto.rickandmortycompose.designsystem.components.atoms.RickAndMortyText
+import com.ernesto.rickandmortycompose.designsystem.theme.LightAqua
+import com.ernesto.rickandmortycompose.designsystem.theme.MediumGreen
 import com.ernesto.rickandmortycompose.designsystem.theme.RickAndMortyComposeTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -58,11 +62,20 @@ class MainActivity : ComponentActivity() {
             )
         }
 
+        val animatedColor by animateColorAsState(
+            targetValue = if (isDetailScreen) MediumGreen else LightAqua
+        )
+
         Scaffold(modifier = Modifier.fillMaxSize(), topBar = {
-            TopAppBar(
+            CenterAlignedTopAppBar(
                 title = {
-                    if (isDetailScreen) RickAndMortyText(stringResource(R.string.character_detail_screen_title)) else RickAndMortyText(
-                        stringResource(R.string.character_list_screen_title)
+                    val title =
+                        if (isDetailScreen) stringResource(R.string.character_detail_screen_title)
+                        else stringResource(R.string.character_list_screen_title)
+                    RickAndMortyText(
+                        text = title,
+                        color = animatedColor,
+                        style = MaterialTheme.typography.titleLarge
                     )
                 },
                 navigationIcon = {
