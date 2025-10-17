@@ -1,9 +1,9 @@
 # Rick & Morty App
 
-Poryecto basado en la API de Rick and Morty, implementando buenas prácticas de arquitectura y manejo de datos.
+Proyecto basado en la API de Rick and Morty, implementando buenas prácticas de arquitectura y manejo de datos.
 
 📸 Capturas de Pantalla
-<p align="center"> <img src="./rick_morty_test/screenshots/screen1.png" alt="Pantalla 1" width="250"/> <img src="./rick_morty_test/screenshots/screen2.png" alt="Pantalla 2" width="250"/> <img src="./rick_morty_test/screenshots/screen3.png" alt="Pantalla 3" width="250"/> </p>
+<p align="center"> <img src="./screenshots/screen1.png" alt="Pantalla 1" width="250"/> <img src="./screenshots/screen2.png" alt="Pantalla 2" width="250"/> <img src="./screenshots/screen3.png" alt="Pantalla 3" width="250"/> </p>
 
 🛠️ Tecnologías y Arquitectura
 
