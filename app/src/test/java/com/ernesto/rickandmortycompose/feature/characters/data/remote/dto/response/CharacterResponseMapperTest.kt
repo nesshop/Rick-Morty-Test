@@ -30,5 +30,7 @@ class CharacterResponseMapperTest {
         assertEquals(response.type, domainModel.type)
         assertEquals(response.gender, domainModel.gender)
         assertEquals(response.image, domainModel.image)
+        assertEquals(response.episode, domainModel.episodes)
+
     }
 }
