@@ -10,8 +10,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.ernesto.rickandmortycompose.R
 import com.ernesto.rickandmortycompose.designsystem.components.atoms.RickAndMortyText
 import com.ernesto.rickandmortycompose.designsystem.theme.MediumGreen
 import com.ernesto.rickandmortycompose.feature.episodes.domain.model.EpisodeModel
@@ -20,7 +22,7 @@ import com.ernesto.rickandmortycompose.feature.episodes.domain.model.EpisodeMode
 fun RickAndMortyEpisodeList(episodes: List<EpisodeModel>?, modifier: Modifier = Modifier) {
     Column(modifier = modifier) {
         RickAndMortyText(
-            text = "Episodes:",
+            text = stringResource(R.string.episode_list_title),
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold
         )

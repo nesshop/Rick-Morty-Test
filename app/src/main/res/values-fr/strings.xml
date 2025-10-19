@@ -27,4 +27,9 @@
     <!--ViewModel Errors -->
     <string name="character_list_view_model_unknow_error_text">Erreur inconnue</string>
     <string name="characters_detail_view_model_loading_error_text">Erreur lors du chargement des détails du personnage</string>
+
+    <!--Episode List-->
+    <string name="episode_list_title">Épisodes:</string>
+    <string name="episode_list_hide_text">Masquer les épisodes</string>
+    <string name="episode_list_not_found_text">Aucun épisode trouvé</string>
 </resources>

@@ -99,7 +99,7 @@ fun RickAndMortyCard(
             Spacer(modifier = Modifier.height(16.dp))
             RickAndMortyButton(
                 modifier = Modifier.fillMaxWidth(),
-                text = if (showEpisodes) "Ocultar Episodios"
+                text = if (showEpisodes) stringResource(R.string.episode_list_hide_text)
                 else stringResource(R.string.character_detail_screen_text_button),
                 icon = Icons.Default.Tv,
                 onClick = { showEpisodes = !showEpisodes
@@ -111,7 +111,7 @@ fun RickAndMortyCard(
             AnimatedVisibility(visible = showEpisodes) {
                 if (episodes.isEmpty()) {
                     RickAndMortyText(
-                        text = "No episodes found"
+                        text = stringResource(R.string.episode_list_not_found_text)
                     )
                 } else {
                     RickAndMortyEpisodeList(
