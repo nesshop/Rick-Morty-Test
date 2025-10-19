@@ -2,6 +2,7 @@ package com.ernesto.rickandmortycompose.feature.episodes.data.repository
 
 import com.ernesto.rickandmortycompose.feature.episodes.data.local.EpisodesLocalDataSource
 import com.ernesto.rickandmortycompose.feature.episodes.data.remote.EpisodesRemoteDataSource
+import com.ernesto.rickandmortycompose.feature.episodes.data.remote.dto.response.toDomain
 import com.ernesto.rickandmortycompose.feature.episodes.domain.model.EpisodeModel
 import com.ernesto.rickandmortycompose.feature.episodes.domain.repository.EpisodeRepository
 import javax.inject.Inject
@@ -15,6 +16,20 @@ class EpisodeRepositoryImpl @Inject constructor(
 
     override suspend fun getEpisodesForCharacter(episodes: List<String>): List<EpisodeModel> {
         if (episodes.isEmpty()) return emptyList()
-        return remoteDataSource.getEpisodesForCharacter(episodes)
+
+        val cachedEpisodes = localDataSource.getEpisodesForCharacter(episodes)
+        if (cachedEpisodes.size == episodes.size) return cachedEpisodes
+
+        val remoteEpisodes = if (episodes.size > 1) {
+            remoteDataSource.getEpisodesForCharacter(episodes.joinToString(","))
+                .map { episodeResponse ->
+                    episodeResponse.toDomain()
+                }
+        } else {
+            listOf(remoteDataSource.getSingleEpisode(episodes.first()).toDomain())
+        }
+
+        localDataSource.saveEpisodes(remoteEpisodes)
+        return remoteEpisodes
     }
 }
