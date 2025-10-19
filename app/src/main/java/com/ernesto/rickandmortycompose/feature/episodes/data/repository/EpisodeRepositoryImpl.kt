@@ -20,7 +20,7 @@ class EpisodeRepositoryImpl @Inject constructor(
         val cachedEpisodes = localDataSource.getEpisodesForCharacter(episodes)
         if (cachedEpisodes.size == episodes.size) return cachedEpisodes
 
-        val remoteEpisodes = if (episodes.size > 1) {
+        val remoteEpisodes = if (episodes.size >= MIN_EPISODES_FOR_BATCH_REQUEST) {
             remoteDataSource.getEpisodesForCharacter(episodes.joinToString(","))
                 .map { episodeResponse ->
                     episodeResponse.toDomain()
@@ -31,5 +31,9 @@ class EpisodeRepositoryImpl @Inject constructor(
 
         localDataSource.saveEpisodes(remoteEpisodes)
         return remoteEpisodes
+    }
+
+    companion object {
+        private const val MIN_EPISODES_FOR_BATCH_REQUEST = 2
     }
 }

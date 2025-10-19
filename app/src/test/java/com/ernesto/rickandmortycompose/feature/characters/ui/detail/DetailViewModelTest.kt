@@ -4,6 +4,7 @@ import android.content.Context
 import app.cash.turbine.test
 import com.ernesto.rickandmortycompose.feature.characters.domain.model.CharacterModel
 import com.ernesto.rickandmortycompose.feature.characters.domain.usecase.GetCharacterByIdUseCase
+import com.ernesto.rickandmortycompose.feature.episodes.domain.usecase.GetEpisodeForCharacterUseCase
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
@@ -23,6 +24,7 @@ class DetailViewModelTest {
 
     private val testDispatcher = StandardTestDispatcher()
     private lateinit var useCase: GetCharacterByIdUseCase
+    private lateinit var getEpisodeForCharacterUseCase: GetEpisodeForCharacterUseCase
     private lateinit var viewModel: DetailViewModel
     private lateinit var context: Context
 
@@ -30,8 +32,9 @@ class DetailViewModelTest {
     fun setup() {
         Dispatchers.setMain(testDispatcher)
         useCase = mockk()
+        getEpisodeForCharacterUseCase = mockk()
         context = mockk()
-        viewModel = DetailViewModel(useCase, context  )
+        viewModel = DetailViewModel(useCase, getEpisodeForCharacterUseCase, context)
     }
 
     @After
@@ -42,7 +45,7 @@ class DetailViewModelTest {
     @Test
     fun `GIVEN useCase returns character WHEN loadCharacter called THEN uiState emits Loading and Success`() =
         runTest {
-            val character = CharacterModel(1, "Rick", "Alive", "Human", "", "Male", "url")
+            val character = CharacterModel(1, "Rick", "Alive", "Human", "", "Male", "url", emptyList())
             coEvery { useCase(1) } returns character
 
             viewModel.uiState.test {

@@ -35,8 +35,8 @@ class GetAllCharactersUseCaseTest {
     fun `WHEN use case is invoked THEN returns flow that emits PagingData`() = runTest {
         //GIVEN
         val characters = listOf(
-            CharacterModel(1, "Rick", "Alive", "Human", "", "Male", ""),
-            CharacterModel(2, "Morty", "Alive", "Human", "", "Male", "")
+            CharacterModel(1, "Rick", "Alive", "Human", "", "Male", "", emptyList()),
+            CharacterModel(2, "Morty", "Alive", "Human", "", "Male", "", emptyList())
         )
         val mockPagingData = PagingData.from(characters)
         coEvery { repository.getAllCharacters() } returns flowOf(mockPagingData)

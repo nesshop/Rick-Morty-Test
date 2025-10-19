@@ -116,7 +116,7 @@ class CharacterRepositoryImplTest {
     fun `GIVEN character exists in local cache WHEN getCharacterById THEN returns cached character without calling remote`() =
         runTest {
             // GIVEN
-            val cachedCharacter = CharacterResponse(1, "Rick", "Alive", "Human", "", "Male", "url1")
+            val cachedCharacter = CharacterResponse(1, "Rick", "Alive", "Human", "", "Male", "url1", emptyList())
             coEvery { localDataSource.getCharacterById(1) } returns cachedCharacter
 
             // WHEN
@@ -133,7 +133,7 @@ class CharacterRepositoryImplTest {
     fun `GIVEN character not in local but exists in remote WHEN getCharacterById THEN fetches saves and returns character`() =
         runTest {
             // GIVEN
-            val remoteCharacter = CharacterResponse(1, "Rick", "Alive", "Human", "", "Male", "url1")
+            val remoteCharacter = CharacterResponse(1, "Rick", "Alive", "Human", "", "Male", "url1", emptyList())
             coEvery { localDataSource.getCharacterById(1) } returns null andThen remoteCharacter
             coEvery { remoteDataSource.getCharacterById(1) } returns remoteCharacter
             coEvery { localDataSource.saveCharacter(remoteCharacter) } just Runs
@@ -168,7 +168,7 @@ class CharacterRepositoryImplTest {
     fun `GIVEN character in cache but remote fails WHEN getCharacterById from remote THEN returns cached version as fallback`() =
         runTest {
             // GIVEN
-            val cachedCharacter = CharacterResponse(1, "Rick", "Alive", "Human", "", "Male", "url1")
+            val cachedCharacter = CharacterResponse(1, "Rick", "Alive", "Human", "", "Male", "url1", emptyList())
             coEvery { localDataSource.getCharacterById(1) } returns null andThen cachedCharacter
             coEvery { remoteDataSource.getCharacterById(1) } throws RuntimeException("Network error")
 
@@ -185,7 +185,7 @@ class CharacterRepositoryImplTest {
     fun `GIVEN remote throws IOException WHEN getCharacterById THEN attempts fallback to cache`() =
         runTest {
             // GIVEN
-            val cachedCharacter = CharacterResponse(1, "Rick", "Alive", "Human", "", "Male", "url1")
+            val cachedCharacter = CharacterResponse(1, "Rick", "Alive", "Human", "", "Male", "url1", emptyList())
             coEvery { localDataSource.getCharacterById(1) } returns null andThen cachedCharacter
             coEvery { remoteDataSource.getCharacterById(1) } throws IOException("Connection timeout")
 
@@ -201,7 +201,7 @@ class CharacterRepositoryImplTest {
     fun `GIVEN save to cache fails WHEN getCharacterById THEN still returns character from remote`() =
         runTest {
             // GIVEN
-            val remoteCharacter = CharacterResponse(1, "Rick", "Alive", "Human", "", "Male", "url1")
+            val remoteCharacter = CharacterResponse(1, "Rick", "Alive", "Human", "", "Male", "url1", emptyList())
             coEvery { localDataSource.getCharacterById(1) } returns null
             coEvery { remoteDataSource.getCharacterById(1) } returns remoteCharacter
             coEvery { localDataSource.saveCharacter(remoteCharacter) } throws RuntimeException("Cache write failed")
@@ -223,8 +223,8 @@ class CharacterRepositoryImplTest {
     fun `GIVEN multiple characters WHEN getCharacterById called sequentially THEN caches work independently`() =
         runTest {
             // GIVEN
-            val rick = CharacterResponse(1, "Rick", "Alive", "Human", "", "Male", "url1")
-            val morty = CharacterResponse(2, "Morty", "Alive", "Human", "", "Male", "url2")
+            val rick = CharacterResponse(1, "Rick", "Alive", "Human", "", "Male", "url1", emptyList())
+            val morty = CharacterResponse(2, "Morty", "Alive", "Human", "", "Male", "url2", emptyList())
 
             coEvery { localDataSource.getCharacterById(1) } returns rick
             coEvery { localDataSource.getCharacterById(2) } returns null
@@ -247,7 +247,7 @@ class CharacterRepositoryImplTest {
     @Test
     fun `GIVEN character ID is 0 WHEN getCharacterById THEN processes normally`() = runTest {
         // GIVEN
-        val character = CharacterResponse(0, "Unknown", "Unknown", "Unknown", "", "Unknown", "")
+        val character = CharacterResponse(0, "Unknown", "Unknown", "Unknown", "", "Unknown", "", emptyList())
         coEvery { localDataSource.getCharacterById(0) } returns character
 
         // WHEN

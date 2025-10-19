@@ -15,7 +15,8 @@ class CharacterResponseMapperTest {
             species = "Human",
             type = "",
             gender = "Male",
-            image = "url"
+            image = "url",
+            episode = emptyList()
         )
 
         //WHEN

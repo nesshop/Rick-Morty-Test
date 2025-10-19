@@ -53,8 +53,8 @@ class CharactersListViewModelTest {
         runTest {
             //GIVEN
             val characters = listOf(
-                CharacterModel(1, "Rick", "Alive", "Human", "", "Male", "url1"),
-                CharacterModel(2, "Morty", "Alive", "Human", "", "Male", "url2")
+                CharacterModel(1, "Rick", "Alive", "Human", "", "Male", "url1", emptyList()),
+                CharacterModel(2, "Morty", "Alive", "Human", "", "Male", "url2", emptyList())
             )
             val expectedPagingData = PagingData.from(characters)
             coEvery { getAllCharactersUseCase() } returns flowOf(expectedPagingData)
@@ -120,8 +120,8 @@ class CharactersListViewModelTest {
         runTest {
             //GIVEN
             val characters = listOf(
-                CharacterModel(1, "Rick", "Alive", "Human", "", "Male", "url1"),
-                CharacterModel(2, "Morty", "Alive", "Human", "", "Male", "url2")
+                CharacterModel(1, "Rick", "Alive", "Human", "", "Male", "url1", emptyList()),
+                CharacterModel(2, "Morty", "Alive", "Human", "", "Male", "url2", emptyList())
             )
             val expectedPagingData = PagingData.from(characters)
             coEvery { getAllCharactersUseCase() } returns flowOf(expectedPagingData)
@@ -144,7 +144,7 @@ class CharactersListViewModelTest {
             //GIVEN
             val query = "Rick"
             val searchResults = listOf(
-                CharacterModel(1, "Rick", "Alive", "Human", "", "Male", "url1")
+                CharacterModel(1, "Rick", "Alive", "Human", "", "Male", "url1", emptyList())
             )
             val expectedPagingData = PagingData.from(searchResults)
             coEvery { getAllCharactersUseCase() } returns flowOf(PagingData.empty())

@@ -21,8 +21,8 @@ class CharactersLocalDataSourceImplTest {
     fun `GIVEN characters saved THEN getAllCharacters returns them`() {
         //GIVEN
         val characters = listOf(
-            CharacterResponse(1, "Rick", "Alive", "Human", "", "Male", "url1"),
-            CharacterResponse(2, "Morty", "Alive", "Human", "", "Male", "url2")
+            CharacterResponse(1, "Rick", "Alive", "Human", "", "Male", "url1", emptyList()),
+            CharacterResponse(2, "Morty", "Alive", "Human", "", "Male", "url2", emptyList())
         )
 
         //WHEN
@@ -36,7 +36,8 @@ class CharactersLocalDataSourceImplTest {
     @Test
     fun `GIVEN characters saved THEN getCharacterById returns correct character`() {
         //GIVEN
-        val character = CharacterResponse(1, "Rick", "Alive", "Human", "", "Male", "url1")
+        val character =
+            CharacterResponse(1, "Rick", "Alive", "Human", "", "Male", "url1", emptyList())
 
         //WHEN
         localDataSource.saveCharacter(character)
@@ -50,8 +51,8 @@ class CharactersLocalDataSourceImplTest {
     fun `GIVEN page saved THEN getCharacterById returns correct character from cacheById`() {
         //GIVEN
         val characters = listOf(
-            CharacterResponse(1, "Rick", "Alive", "Human", "", "Male", "url1"),
-            CharacterResponse(2, "Morty", "Alive", "Human", "", "Male", "url2")
+            CharacterResponse(1, "Rick", "Alive", "Human", "", "Male", "url1", emptyList()),
+            CharacterResponse(2, "Morty", "Alive", "Human", "", "Male", "url2", emptyList())
         )
 
         //WHEN
@@ -87,10 +88,10 @@ class CharactersLocalDataSourceImplTest {
     fun `GIVEN multiple pages saved WHEN getAllCharacters THEN returns correct page`() {
         // GIVEN
         val page1Characters = listOf(
-            CharacterResponse(1, "Rick", "Alive", "Human", "", "Male", "url1")
+            CharacterResponse(1, "Rick", "Alive", "Human", "", "Male", "url1", emptyList())
         )
         val page2Characters = listOf(
-            CharacterResponse(3, "Summer", "Alive", "Human", "", "Female", "url3")
+            CharacterResponse(3, "Summer", "Alive", "Human", "", "Female", "url3", emptyList())
         )
 
         localDataSource.saveCharacters(page = 1, page1Characters)
@@ -109,10 +110,10 @@ class CharactersLocalDataSourceImplTest {
     fun `GIVEN multiple pages saved WHEN getCharacterById THEN finds character from any page`() {
         // GIVEN
         val page1Characters = listOf(
-            CharacterResponse(1, "Rick", "Alive", "Human", "", "Male", "url1")
+            CharacterResponse(1, "Rick", "Alive", "Human", "", "Male", "url1", emptyList())
         )
         val page2Characters = listOf(
-            CharacterResponse(3, "Summer", "Alive", "Human", "", "Female", "url3")
+            CharacterResponse(3, "Summer", "Alive", "Human", "", "Female", "url3", emptyList())
         )
 
         localDataSource.saveCharacters(page = 1, page1Characters)
@@ -130,8 +131,26 @@ class CharactersLocalDataSourceImplTest {
     @Test
     fun `GIVEN character saved individually then by page WHEN getCharacterById THEN returns page version`() {
         // GIVEN
-        val individualCharacter = CharacterResponse(1, "Rick individual", "Alive", "Human", "", "Male", "url1")
-        val pageCharacter = CharacterResponse(1, "Rick from page", "Dead", "Robot", "", "Female", "url2")
+        val individualCharacter = CharacterResponse(
+            1,
+            "Rick individual",
+            "Alive",
+            "Human",
+            "",
+            "Male",
+            "url1",
+            emptyList()
+        )
+        val pageCharacter = CharacterResponse(
+            1,
+            "Rick from page",
+            "Dead",
+            "Robot",
+            "",
+            "Female",
+            "url2",
+            emptyList()
+        )
 
         localDataSource.saveCharacter(individualCharacter)
         localDataSource.saveCharacters(page = 1, listOf(pageCharacter)) // Sobrescribe
@@ -147,11 +166,11 @@ class CharactersLocalDataSourceImplTest {
     fun `GIVEN page overwritten WHEN getAllCharacters THEN returns latest version`() {
         // GIVEN
         val originalCharacters = listOf(
-            CharacterResponse(1, "Rick", "Alive", "Human", "", "Male", "url1")
+            CharacterResponse(1, "Rick", "Alive", "Human", "", "Male", "url1", emptyList())
         )
         val updatedCharacters = listOf(
-            CharacterResponse(2, "Morty", "Alive", "Human", "", "Male", "url2"),
-            CharacterResponse(3, "Summer", "Alive", "Human", "", "Female", "url3")
+            CharacterResponse(2, "Morty", "Alive", "Human", "", "Male", "url2", emptyList()),
+            CharacterResponse(3, "Summer", "Alive", "Human", "", "Female", "url3", emptyList())
         )
 
         localDataSource.saveCharacters(page = 1, originalCharacters)
@@ -169,10 +188,10 @@ class CharactersLocalDataSourceImplTest {
     fun `GIVEN page overwritten WHEN getCharacterById THEN returns character from latest page version`() {
         // GIVEN
         val originalCharacters = listOf(
-            CharacterResponse(1, "Rick v1", "Alive", "Human", "", "Male", "url1")
+            CharacterResponse(1, "Rick v1", "Alive", "Human", "", "Male", "url1", emptyList())
         )
         val updatedCharacters = listOf(
-            CharacterResponse(1, "Rick v2", "Dead", "Robot", "", "Female", "url2")
+            CharacterResponse(1, "Rick v2", "Dead", "Robot", "", "Female", "url2", emptyList())
         )
 
         localDataSource.saveCharacters(page = 1, originalCharacters)
@@ -201,8 +220,10 @@ class CharactersLocalDataSourceImplTest {
     @Test
     fun `GIVEN character overwritten individually WHEN getCharacterById THEN returns latest version`() {
         // GIVEN
-        val originalCharacter = CharacterResponse(1, "Rick v1", "Alive", "Human", "", "Male", "url1")
-        val updatedCharacter = CharacterResponse(1, "Rick v2", "Dead", "Robot", "", "Female", "url2")
+        val originalCharacter =
+            CharacterResponse(1, "Rick v1", "Alive", "Human", "", "Male", "url1", emptyList())
+        val updatedCharacter =
+            CharacterResponse(1, "Rick v2", "Dead", "Robot", "", "Female", "url2", emptyList())
 
         localDataSource.saveCharacter(originalCharacter)
         localDataSource.saveCharacter(updatedCharacter)

@@ -54,8 +54,8 @@ class CharactersPagingSourceTest {
             // GIVEN
             val page = 1
             val cached = listOf(
-                CharacterResponse(1, "Rick", "Alive", "Human", "", "Male", "url1"),
-                CharacterResponse(2, "Morty", "Alive", "Human", "", "Male", "url2")
+                CharacterResponse(1, "Rick", "Alive", "Human", "", "Male", "url1", emptyList()),
+                CharacterResponse(2, "Morty", "Alive", "Human", "", "Male", "url2", emptyList())
             )
             val pagingSource = CharactersPagingSource(remoteDataSource, localDataSource)
             coEvery { localDataSource.getAllCharacters(page) } returns cached
@@ -82,7 +82,7 @@ class CharactersPagingSourceTest {
             val pagingSource = CharactersPagingSource(remoteDataSource, localDataSource)
             coEvery { localDataSource.getAllCharacters(page) } returns null
             val remoteCharactersList = listOf(
-                CharacterResponse(2, "Morty", "Alive", "Human", "", "Male", "url")
+                CharacterResponse(2, "Morty", "Alive", "Human", "", "Male", "url", emptyList())
             )
             val infoWithNext = InfoResponse(
                 count = 826,
@@ -122,7 +122,7 @@ class CharactersPagingSourceTest {
         coEvery { localDataSource.getAllCharacters(page) } returns null
 
         val remoteCharactersList = listOf(
-            CharacterResponse(3, "Summer", "Alive", "Human", "", "Female", "url3")
+            CharacterResponse(3, "Summer", "Alive", "Human", "", "Female", "url3", emptyList())
         )
         val infoResponseWithNext = InfoResponse(
             count = 826,
@@ -156,7 +156,7 @@ class CharactersPagingSourceTest {
         coEvery { localDataSource.getAllCharacters(page) } returns null
 
         val remoteCharacters = listOf(
-            CharacterResponse(4, "Beth", "Alive", "Human", "", "Female", "url4")
+            CharacterResponse(4, "Beth", "Alive", "Human", "", "Female", "url4", emptyList())
         )
         val infoResponseNoNext = InfoResponse(
             count = 826,
@@ -232,8 +232,8 @@ class CharactersPagingSourceTest {
             val pagingSource = CharactersPagingSource(remoteDataSource, localDataSource, query)
 
             val remoteCharacters = listOf(
-                CharacterResponse(1, "Rick Sanchez", "Alive", "Human", "", "Male", "url1"),
-                CharacterResponse(2, "Rick Prime", "Unknown", "Human", "", "Male", "url2")
+                CharacterResponse(1, "Rick Sanchez", "Alive", "Human", "", "Male", "url1", emptyList()),
+                CharacterResponse(2, "Rick Prime", "Unknown", "Human", "", "Male", "url2", emptyList())
             )
             val infoResponse = InfoResponse(
                 count = 2,
@@ -276,9 +276,9 @@ class CharactersPagingSourceTest {
             val pagingSource = CharactersPagingSource(remoteDataSource, localDataSource, query)
 
             val character1 =
-                CharacterResponse(3, "Morty Smith", "Alive", "Human", "", "Male", "url3")
+                CharacterResponse(3, "Morty Smith", "Alive", "Human", "", "Male", "url3", emptyList())
             val character2 =
-                CharacterResponse(4, "Evil Morty", "Alive", "Human", "", "Male", "url4")
+                CharacterResponse(4, "Evil Morty", "Alive", "Human", "", "Male", "url4", emptyList())
             val remoteCharacters = listOf(character1, character2)
 
             val infoResponse = InfoResponse(
@@ -317,7 +317,7 @@ class CharactersPagingSourceTest {
             val pagingSource = CharactersPagingSource(remoteDataSource, localDataSource, query)
 
             val cached = listOf(
-                CharacterResponse(1, "Rick", "Alive", "Human", "", "Male", "url1")
+                CharacterResponse(1, "Rick", "Alive", "Human", "", "Male", "url1", emptyList())
             )
             coEvery { localDataSource.getAllCharacters(page) } returns cached
 
@@ -410,7 +410,7 @@ class CharactersPagingSourceTest {
             val pagingSource = CharactersPagingSource(remoteDataSource, localDataSource, query)
 
             val remoteCharacters = listOf(
-                CharacterResponse(1, "Rick Sanchez", "Alive", "Human", "", "Male", "url1")
+                CharacterResponse(1, "Rick Sanchez", "Alive", "Human", "", "Male", "url1", emptyList())
             )
             val infoResponse = InfoResponse(
                 count = 50,
@@ -445,7 +445,7 @@ class CharactersPagingSourceTest {
         val pagingSource = CharactersPagingSource(remoteDataSource, localDataSource)
         val pages = listOf(
             PagingSource.LoadResult.Page(
-                data = listOf(CharacterModel(1, "Rick", "Alive", "Human", "", "Male", "url1")),
+                data = listOf(CharacterModel(1, "Rick", "Alive", "Human", "", "Male", "url1", emptyList())),
                 prevKey = null,
                 nextKey = 2
             )
