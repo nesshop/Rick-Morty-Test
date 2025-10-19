@@ -17,7 +17,9 @@ data class CharacterResponse(
     @SerializedName("gender")
     val gender: String,
     @SerializedName("image")
-    val image: String
+    val image: String,
+    @SerializedName("episode")
+    val episode: List<String>
 )
 
 fun CharacterResponse.toDomain() = CharacterModel(
@@ -27,5 +29,8 @@ fun CharacterResponse.toDomain() = CharacterModel(
     species = species,
     type = type,
     gender = gender,
-    image = image
+    image = image,
+    episodes = episode.map { it.extractEpisodeNumber() }
 )
+
+fun String.extractEpisodeNumber(): String = substringAfterLast("/")

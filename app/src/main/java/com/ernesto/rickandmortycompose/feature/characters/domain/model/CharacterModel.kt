@@ -12,4 +12,5 @@ data class CharacterModel(
     val type: String,
     val gender: String,
     val image: String,
+    val episodes: List<String>
 )

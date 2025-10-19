@@ -2,6 +2,7 @@ package com.ernesto.rickandmortycompose.core.di
 
 import com.ernesto.rickandmortycompose.BuildConfig
 import com.ernesto.rickandmortycompose.feature.characters.data.remote.CharacterApiService
+import com.ernesto.rickandmortycompose.feature.episodes.data.remote.EpisodeApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,5 +27,11 @@ object NetworkModule {
     @Provides
     fun provideCharacterApiService(retrofit: Retrofit): CharacterApiService {
         return retrofit.create(CharacterApiService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideEpisodeApiService(retrofit: Retrofit): EpisodeApiService {
+        return retrofit.create(EpisodeApiService::class.java)
     }
 }

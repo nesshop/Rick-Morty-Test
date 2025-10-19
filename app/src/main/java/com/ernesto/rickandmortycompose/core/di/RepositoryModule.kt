@@ -6,6 +6,12 @@ import com.ernesto.rickandmortycompose.feature.characters.data.remote.Characters
 import com.ernesto.rickandmortycompose.feature.characters.data.remote.CharactersRemoteDataSourceImpl
 import com.ernesto.rickandmortycompose.feature.characters.data.repository.CharacterRepositoryImpl
 import com.ernesto.rickandmortycompose.feature.characters.domain.repository.CharacterRepository
+import com.ernesto.rickandmortycompose.feature.episodes.data.local.EpisodesLocalDataSource
+import com.ernesto.rickandmortycompose.feature.episodes.data.local.EpisodesLocalDataSourceImpl
+import com.ernesto.rickandmortycompose.feature.episodes.data.remote.EpisodeRemoteDataSourceImpl
+import com.ernesto.rickandmortycompose.feature.episodes.data.remote.EpisodesRemoteDataSource
+import com.ernesto.rickandmortycompose.feature.episodes.data.repository.EpisodeRepositoryImpl
+import com.ernesto.rickandmortycompose.feature.episodes.domain.repository.EpisodeRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -28,5 +34,20 @@ abstract class RepositoryModule {
     abstract fun bindCharactersRemoteDataSource(
         charactersRemoteDataSourceImpl: CharactersRemoteDataSourceImpl
     ): CharactersRemoteDataSource
+
+    @Binds
+    abstract fun bindEpisodeRepository(
+        episodeRepositoryImpl: EpisodeRepositoryImpl
+    ): EpisodeRepository
+
+    @Binds
+    abstract fun bindEpisodesRemoteDataSource(
+        episodeRemoteDataSourceImpl: EpisodeRemoteDataSourceImpl
+    ): EpisodesRemoteDataSource
+
+    @Binds
+    abstract fun bindEpisodesLocalDataSource(
+        episodesLocalDataSourceImpl: EpisodesLocalDataSourceImpl
+    ): EpisodesLocalDataSource
 
 }

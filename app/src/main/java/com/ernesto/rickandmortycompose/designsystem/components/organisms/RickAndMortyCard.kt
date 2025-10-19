@@ -1,5 +1,6 @@
 package com.ernesto.rickandmortycompose.designsystem.components.organisms
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +18,10 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -26,10 +31,20 @@ import com.ernesto.rickandmortycompose.R
 import com.ernesto.rickandmortycompose.designsystem.components.atoms.RickAndMortyText
 import com.ernesto.rickandmortycompose.designsystem.components.molecules.CharacterStatusChip
 import com.ernesto.rickandmortycompose.designsystem.components.molecules.RickAndMortyButton
+import com.ernesto.rickandmortycompose.designsystem.components.molecules.RickAndMortyEpisodeList
 import com.ernesto.rickandmortycompose.feature.characters.domain.model.CharacterModel
+import com.ernesto.rickandmortycompose.feature.episodes.domain.model.EpisodeModel
 
 @Composable
-fun RickAndMortyCard(characterModel: CharacterModel, modifier: Modifier) {
+fun RickAndMortyCard(
+    characterModel: CharacterModel,
+    episodes: List<EpisodeModel>,
+    modifier: Modifier,
+    onLoadEpisodes: (List<String>) -> Unit
+) {
+
+    var showEpisodes by remember { mutableStateOf(false) }
+
     Card(
         modifier = modifier,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
@@ -84,9 +99,27 @@ fun RickAndMortyCard(characterModel: CharacterModel, modifier: Modifier) {
             Spacer(modifier = Modifier.height(16.dp))
             RickAndMortyButton(
                 modifier = Modifier.fillMaxWidth(),
-                text = stringResource(R.string.character_detail_screen_text_button),
+                text = if (showEpisodes) "Ocultar Episodios"
+                else stringResource(R.string.character_detail_screen_text_button),
                 icon = Icons.Default.Tv,
+                onClick = { showEpisodes = !showEpisodes
+                    if (showEpisodes && episodes.isEmpty()) {
+                        onLoadEpisodes(characterModel.episodes)
+                    }
+                }
             )
+            AnimatedVisibility(visible = showEpisodes) {
+                if (episodes.isEmpty()) {
+                    RickAndMortyText(
+                        text = "No episodes found"
+                    )
+                } else {
+                    RickAndMortyEpisodeList(
+                        episodes = episodes,
+                        modifier = Modifier.padding(top = 16.dp)
+                    )
+                }
+            }
         }
     }
 }

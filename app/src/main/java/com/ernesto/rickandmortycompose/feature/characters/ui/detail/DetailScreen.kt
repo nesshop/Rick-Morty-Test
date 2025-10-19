@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -35,17 +37,21 @@ fun DetailScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
+            .verticalScroll(rememberScrollState())
     ) {
-        when (uiState) {
+        when (val state = uiState) {
             is DetailUiState.Loading -> {
                 RickAndMortyLoading()
             }
 
             is DetailUiState.Success -> {
-                val character = (uiState as DetailUiState.Success).character
+                val character = state.character
                 Column(modifier = Modifier.fillMaxSize()) {
                     RickAndMortyHeader(character, modifier = Modifier.fillMaxWidth())
-                    RickAndMortyCard(character, modifier = Modifier.fillMaxWidth().offset(y = (-36).dp))
+                    RickAndMortyCard(character, episodes = state.episodes, modifier = Modifier.fillMaxWidth().offset(y = (-36).dp),
+                        onLoadEpisodes = { episodes ->
+                            detailViewModel.loadEpisodes(episodes)
+                        })
                 }
             }
 
