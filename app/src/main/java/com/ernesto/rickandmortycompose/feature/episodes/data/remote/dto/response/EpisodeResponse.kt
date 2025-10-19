@@ -4,6 +4,8 @@ import com.ernesto.rickandmortycompose.feature.episodes.domain.model.EpisodeMode
 import com.google.gson.annotations.SerializedName
 
 data class EpisodeResponse(
+    @SerializedName("id")
+    val id: String,
     @SerializedName("name")
     val name: String,
     @SerializedName("episode")
@@ -11,6 +13,7 @@ data class EpisodeResponse(
 )
 
 fun EpisodeResponse.toDomain() = EpisodeModel(
+    id = id,
     name = name,
     episode = episode
 )

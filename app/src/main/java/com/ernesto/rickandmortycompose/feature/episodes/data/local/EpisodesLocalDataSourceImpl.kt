@@ -14,7 +14,7 @@ class EpisodesLocalDataSourceImpl @Inject constructor() : EpisodesLocalDataSourc
 
     override suspend fun saveEpisodes(episodes: List<EpisodeModel>) {
         episodes.forEach { episode ->
-            cachedEpisodes[episode.episode] = episode
+            cachedEpisodes[episode.id] = episode
         }
     }
 }
