@@ -1,12 +1,11 @@
 package com.ernesto.rickandmortycompose.feature.characters.domain.repository
 
-import androidx.paging.PagingData
 import com.ernesto.rickandmortycompose.feature.characters.domain.model.CharacterModel
-import kotlinx.coroutines.flow.Flow
+import com.ernesto.rickandmortycompose.feature.characters.domain.model.pagination.CharacterPaginator
 
 interface CharacterRepository {
-    fun getAllCharacters(): Flow<PagingData<CharacterModel>>
+    fun getAllCharacters(): CharacterPaginator
     suspend fun getCharacterById(id: Int): CharacterModel
-    fun searchCharacters(query: String): Flow<PagingData<CharacterModel>>
+    fun searchCharacters(query: String): CharacterPaginator
 
 }

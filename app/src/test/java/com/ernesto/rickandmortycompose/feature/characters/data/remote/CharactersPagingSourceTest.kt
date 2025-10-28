@@ -8,6 +8,7 @@ import com.ernesto.rickandmortycompose.feature.characters.data.remote.dto.respon
 import com.ernesto.rickandmortycompose.feature.characters.data.remote.dto.response.CharactersDataResponse
 import com.ernesto.rickandmortycompose.feature.characters.data.remote.dto.response.InfoResponse
 import com.ernesto.rickandmortycompose.feature.characters.domain.model.CharacterModel
+import com.ernesto.rickandmortycompose.feature.characters.ui.characterlist.paging.CharactersPagingSource
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify

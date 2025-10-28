@@ -1,15 +1,12 @@
 package com.ernesto.rickandmortycompose.feature.characters.data.repository
 
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
 import com.ernesto.rickandmortycompose.feature.characters.data.local.CharactersLocalDataSource
-import com.ernesto.rickandmortycompose.feature.characters.data.remote.CharactersPagingSource
+import com.ernesto.rickandmortycompose.feature.characters.data.paginator.CharacterPaginatorImpl
 import com.ernesto.rickandmortycompose.feature.characters.data.remote.CharactersRemoteDataSource
 import com.ernesto.rickandmortycompose.feature.characters.data.remote.dto.response.toDomain
 import com.ernesto.rickandmortycompose.feature.characters.domain.model.CharacterModel
+import com.ernesto.rickandmortycompose.feature.characters.domain.model.pagination.CharacterPaginator
 import com.ernesto.rickandmortycompose.feature.characters.domain.repository.CharacterRepository
-import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -19,25 +16,12 @@ class CharacterRepositoryImpl @Inject constructor(
     private val localDataSource: CharactersLocalDataSource
 ) : CharacterRepository {
 
-    companion object {
-        const val MAX_ITEMS = 20
-        const val PREFETCH_DISTANCE = 5
-    }
-
-    override fun getAllCharacters(): Flow<PagingData<CharacterModel>> {
-        return Pager(
-            config = PagingConfig(
-                pageSize = MAX_ITEMS,
-                prefetchDistance = PREFETCH_DISTANCE,
-                initialLoadSize = MAX_ITEMS,
-                enablePlaceholders = false
-            ),
-            pagingSourceFactory = {
-                CharactersPagingSource(
-                    remoteDataSource = remoteDataSource,
-                    localDataSource = localDataSource
-                )
-            }).flow
+    override fun getAllCharacters(): CharacterPaginator {
+        return CharacterPaginatorImpl(
+            remoteDataSource = remoteDataSource,
+            localDataSource = localDataSource,
+            searchQuery = null
+        )
     }
 
     override suspend fun getCharacterById(id: Int): CharacterModel {
@@ -54,21 +38,11 @@ class CharacterRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun searchCharacters(query: String): Flow<PagingData<CharacterModel>> {
-        return Pager(
-            config = PagingConfig(
-                pageSize = MAX_ITEMS,
-                prefetchDistance = PREFETCH_DISTANCE,
-                initialLoadSize = MAX_ITEMS,
-                enablePlaceholders = false
-            ),
-            pagingSourceFactory = {
-                CharactersPagingSource(
-                    remoteDataSource = remoteDataSource,
-                    localDataSource = localDataSource,
-                    searchQuery = query
-                )
-            }
-        ).flow
+    override fun searchCharacters(query: String): CharacterPaginator {
+        return CharacterPaginatorImpl(
+            remoteDataSource = remoteDataSource,
+            localDataSource = localDataSource,
+            searchQuery = query
+        )
     }
 }
