@@ -1,11 +1,10 @@
 package com.ernesto.rickandmortycompose.feature.characters.data.repository
 
-import androidx.paging.PagingData
 import com.ernesto.rickandmortycompose.feature.characters.data.local.CharactersLocalDataSource
 import com.ernesto.rickandmortycompose.feature.characters.data.remote.CharactersRemoteDataSource
 import com.ernesto.rickandmortycompose.feature.characters.data.remote.dto.response.CharacterResponse
 import com.ernesto.rickandmortycompose.feature.characters.data.remote.dto.response.toDomain
-import com.ernesto.rickandmortycompose.feature.characters.domain.model.CharacterModel
+import com.ernesto.rickandmortycompose.feature.characters.domain.model.pagination.CharacterPaginator
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -13,7 +12,6 @@ import io.mockk.just
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -56,7 +54,7 @@ class CharacterRepositoryImplTest {
 
         // THEN
         assertNotNull(result)
-        assertTrue(result is Flow<PagingData<CharacterModel>>)
+        assertTrue(result is CharacterPaginator)
     }
 
     @Test
@@ -77,7 +75,7 @@ class CharacterRepositoryImplTest {
 
         // THEN
         assertNotNull(result)
-        assertTrue(result is Flow<PagingData<CharacterModel>>)
+        assertTrue(result is CharacterPaginator)
     }
 
     @Test
@@ -87,7 +85,7 @@ class CharacterRepositoryImplTest {
 
         // THEN
         assertNotNull(result)
-        assertTrue(result is Flow<PagingData<CharacterModel>>)
+        assertTrue(result is CharacterPaginator)
     }
 
     @Test
@@ -211,13 +209,6 @@ class CharacterRepositoryImplTest {
                 repository.getCharacterById(1)
             }
         }
-
-    @Test
-    fun `WHEN repository is created THEN has correct page configuration`() {
-        // THEN
-        assertEquals(20, CharacterRepositoryImpl.MAX_ITEMS)
-        assertEquals(5, CharacterRepositoryImpl.PREFETCH_DISTANCE)
-    }
 
     @Test
     fun `GIVEN multiple characters WHEN getCharacterById called sequentially THEN caches work independently`() =
